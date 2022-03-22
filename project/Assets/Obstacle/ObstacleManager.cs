@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class ObstacleManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    // speed at which the obstacle moves
+    private float speed;
+
+    // obstacle rigidbody
+    private Rigidbody2D obstacle;
+
     void Start()
     {
-        
+        obstacle = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void WakeUp()
     {
-        
+        if (obstacle.IsSleeping())
+        {
+            obstacle.WakeUp();
+            obstacle.velocity = new Vector2(-speed, 0);
+        }
     }
 }

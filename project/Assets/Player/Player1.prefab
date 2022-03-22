@@ -166,9 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c672988952274519a9c32dc25aba3fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flightForce: 7
-  maxSpeed: 10
-  minSpeed: -10
+  flightForce: 5
+  maxSpeed: 7
+  minSpeed: -7
 --- !u!114 &-4667153537626977522
 MonoBehaviour:
   m_ObjectHideFlags: 0
