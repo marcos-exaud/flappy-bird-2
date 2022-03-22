@@ -20,11 +20,11 @@ public class ObstacleManager : MonoBehaviour
     {
         GameObject intruder = intruderCollider.gameObject;
 
-        // if the other collider is an obsticle, cycle its position to the other side of the game screen
-        if (intruder.layer == LayerMask.NameToLayer("Reset Checkpoint"))
+        // if the other collider is an obstacle checkpoint:
+        if (intruder.layer == LayerMask.NameToLayer("Reset Checkpoint")) // loop the obstacle to the other side of the game
         {
             Cycle();
-        } else if (intruder.layer == LayerMask.NameToLayer("Reposition Checkpoint"))
+        } else if (intruder.layer == LayerMask.NameToLayer("Reposition Checkpoint")) // change the obstacle's height
         {
             float newHeight = Tools.LimitedRandomVariance(intruder.GetComponent<RepositionCheckpoint>().GetLastObstacleHeight(), Consts.MIN_GAP_HEIGHT, Consts.MAX_GAP_HEIGHT, Consts.MAX_ABS_VARIANCE);
             RepositionY(newHeight);
