@@ -24,6 +24,11 @@ public class ObstacleManager : MonoBehaviour
         if (intruder.layer == LayerMask.NameToLayer("Reset Checkpoint"))
         {
             Cycle();
+        } else if (intruder.layer == LayerMask.NameToLayer("Reposition Checkpoint"))
+        {
+            float newHeight = Tools.LimitedRandomVariance(intruder.GetComponent<RepositionCheckpoint>().GetLastObstacleHeight(), Consts.MIN_GAP_HEIGHT, Consts.MAX_GAP_HEIGHT, Consts.MAX_ABS_VARIANCE);
+            RepositionY(newHeight);
+            intruder.GetComponent<RepositionCheckpoint>().SetLastObstacleHeight(newHeight);
         }
     }
 
