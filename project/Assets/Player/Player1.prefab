@@ -166,3 +166,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flightForce: 7
+  maxSpeed: 10
+  minSpeed: -10
