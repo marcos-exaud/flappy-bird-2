@@ -28,12 +28,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            // awakes the rigidbody on first player input
-            if (bird.IsSleeping())
-            {
-                bird.WakeUp();
-            }
-
             // applies upwards force on the rigidbody
             Fly();
         }
