@@ -42,12 +42,12 @@ public class PlayerMovement : MonoBehaviour
         LimitSpeed(bird.velocity);
     }
 
-    void Fly()
+    private void Fly()
     {
         bird.AddForce(new Vector2(0, flightForce * bird.mass), ForceMode2D.Impulse);
     }
 
-    void LimitSpeed(Vector2 velocity)
+    private void LimitSpeed(Vector2 velocity)
     {
         bird.velocity = new Vector2(velocity.x, Mathf.Clamp(velocity.y, minSpeed, maxSpeed));
     }
