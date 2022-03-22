@@ -16,6 +16,17 @@ public class ObstacleManager : MonoBehaviour
         obstacle = GetComponent<Rigidbody2D>();
     }
 
+    void OnTriggerEnter2D(Collider2D intruderCollider)
+    {
+        GameObject intruder = intruderCollider.gameObject;
+
+        // if the other collider is an obsticle, cycle its position to the other side of the game screen
+        if (intruder.layer == LayerMask.NameToLayer("Reset Checkpoint"))
+        {
+            Cycle();
+        }
+    }
+
     public void WakeUp()
     {
         if (obstacle.IsSleeping())
@@ -23,5 +34,17 @@ public class ObstacleManager : MonoBehaviour
             obstacle.WakeUp();
             obstacle.velocity = new Vector2(-speed, 0);
         }
+    }
+
+    // cycles the obstacle to the other side of game, effectively respawning it
+    public void Cycle()
+    {
+        obstacle.position = new Vector2(14f, obstacle.position.y);
+    }
+
+    // repositions the obstacle in the y axis
+    public void RepositionY(float value)
+    {
+        obstacle.position = new Vector2(obstacle.position.x, value);
     }
 }
