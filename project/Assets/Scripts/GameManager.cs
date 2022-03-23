@@ -1,24 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] players;
+    private List<GameObject> players;
 
     [SerializeField]
-    private GameObject[] obstacles;
+    private List<GameObject> obstacles;
+
+    [SerializeField]
+    private TextMeshProUGUI scoreDisplay;
 
     void Start()
     {
         StartCoroutine(StartGame());
     }
 
+    void OnEnable()
+    {
+        EventManager.OnObstacleClear += IncrementPlayerScore;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnObstacleClear -= IncrementPlayerScore;
+    }
+
+    void OnDestroy()
+    {
+        EventManager.OnObstacleClear -= IncrementPlayerScore;
+    }
+
     private IEnumerator StartGame()
     {
         // wait for player to input first movement to start the game
-        yield return WaitForInput(KeyCode.UpArrow);
+        yield return new WaitUntil( () => Input.GetKeyDown(KeyCode.UpArrow));
 
         // wake up all players and obstacles to properly start the game
         foreach (GameObject player in players)
@@ -31,20 +50,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitForInput(KeyCode key)
+    // clearer is the player who cleared the obstacle
+    public void IncrementPlayerScore(GameObject obstacleClearer)
     {
-        while (true)
-        {
-            // if user input wasnt received, restart loop
-            if (!Input.GetKeyDown(key))
-            {
-                // waits one frame
-                yield return null;
-                continue;
-            }
+        PlayerManager obstacleClearerPlayerManager = players.Find((player) => player.name == obstacleClearer.name).GetComponent<PlayerManager>();
+        obstacleClearerPlayerManager.IncrementScore();
 
-            //if user input was received, this line will be reached and it will end the loop
-            break;
-        }
+        int clearerScore = obstacleClearerPlayerManager.GetPlayerScore();
+        scoreDisplay.text = "" + clearerScore;
     }
 }
