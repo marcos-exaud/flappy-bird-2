@@ -10,4 +10,8 @@ public static class Consts
 
     // maximum absolute height change between subsequent obstacles
     public static readonly float MAX_ABS_VARIANCE = 3f;
+
+    // scene values
+    public static readonly int STARTING_SCENE = 0;
+    public static readonly int BASE_GAME_SCENE = 1;
 }

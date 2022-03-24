@@ -26,7 +26,7 @@ public class PlayerManager : MonoBehaviour
     {
         // to do
         Debug.Log("dies");
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("SingleplayerGameScene");
     }
 
     public void WakeUp()
