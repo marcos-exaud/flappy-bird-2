@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class MenuManager : MonoBehaviour
 {
@@ -18,5 +19,17 @@ public class MenuManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void Connect()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.JoinRandomOrCreateRoom(null , 2);
+        }
+        else
+        {
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 }

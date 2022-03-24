@@ -11,6 +11,12 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverUI;
 
+    [SerializeField]
+    private GameObject multiplayerMenuUI;
+
+    [SerializeField]
+    private GameObject defaultMenuUI;
+
     void OnEnable()
     {
         EventManager.OnGameOver += DisplayGameOverUI;
@@ -38,5 +44,16 @@ public class UIManager : MonoBehaviour
     private void DisplayGameOverUI()
     {
         gameOverUI.SetActive(true);
+    }
+
+    /// <summary>
+    /// Method <c>ToggleMainMenuUI</c> Toggles between the Default Menu UI and the Multiplayer Menu UI in the Main Menu Screen
+    /// </summary>
+    public void ToggleMainMenuUI()
+    {
+        bool multiplayerUIIsToggled = multiplayerMenuUI.activeSelf;
+        multiplayerMenuUI.SetActive(!multiplayerUIIsToggled);
+        defaultMenuUI.SetActive(multiplayerUIIsToggled);
+
     }
 }
