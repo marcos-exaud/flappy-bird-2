@@ -2,15 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerManager : MonoBehaviour
 {
     // player rigidbody
     private Rigidbody2D bird;
 
+    private int playerScore;
+
     void Start()
     {
         bird = GetComponent<Rigidbody2D>();
+        playerScore = 0;
+    }
+
+    public int GetPlayerScore()
+    {
+        return playerScore;
     }
 
     public void Kill()
@@ -26,5 +35,10 @@ public class PlayerManager : MonoBehaviour
         {
             bird.WakeUp();
         }
+    }
+
+    public void IncrementScore()
+    {
+        playerScore++;
     }
 }
