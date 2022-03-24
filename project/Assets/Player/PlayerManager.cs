@@ -24,9 +24,9 @@ public class PlayerManager : MonoBehaviour
 
     public void Kill()
     {
-        // to do
-        Debug.Log("dies");
-        SceneManager.LoadScene("SingleplayerGameScene");
+        bird.Sleep();
+        gameObject.GetComponent<PlayerMovement>().enabled = false;
+        EventManager.OnPlayerDeath?.Invoke();
     }
 
     public void WakeUp()
@@ -40,5 +40,10 @@ public class PlayerManager : MonoBehaviour
     public void IncrementScore()
     {
         playerScore++;
+    }
+
+    public bool PlayerIsAlive()
+    {
+        return bird.IsAwake();
     }
 }

@@ -338,7 +338,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1573049290518269394, guid: a229ec938de5845e2a03d6abc28b88a7, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1573049290518269394, guid: a229ec938de5845e2a03d6abc28b88a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1625,7 +1625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1787491933
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2238,6 +2238,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: gameOverUI
+      value: 
+      objectReference: {fileID: 1787491932}
     - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
       propertyPath: scoreboard
       value: 
