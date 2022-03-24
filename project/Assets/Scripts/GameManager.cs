@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> obstacles;
 
     [SerializeField]
-    private TextMeshProUGUI scoreDisplay;
+    private GameObject uiManager;
 
     void Start()
     {
@@ -53,10 +52,10 @@ public class GameManager : MonoBehaviour
     // clearer is the player who cleared the obstacle
     public void IncrementPlayerScore(GameObject obstacleClearer)
     {
-        PlayerManager obstacleClearerPlayerManager = players.Find((player) => player.name == obstacleClearer.name).GetComponent<PlayerManager>();
-        obstacleClearerPlayerManager.IncrementScore();
+        GameObject player = players.Find((player) => player.name == obstacleClearer.name);
+        PlayerManager playerManager = player.GetComponent<PlayerManager>();
+        playerManager.IncrementScore();
 
-        int clearerScore = obstacleClearerPlayerManager.GetPlayerScore();
-        scoreDisplay.text = "" + clearerScore;
+        uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
     }
 }
