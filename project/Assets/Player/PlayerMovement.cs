@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && bird.IsAwake())
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             // applies upwards force on the rigidbody
             Fly();
