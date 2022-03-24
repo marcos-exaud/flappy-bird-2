@@ -27,9 +27,16 @@ public class ObstacleManager : MonoBehaviour
         }
         else if (intruder.layer == LayerMask.NameToLayer("Reposition Checkpoint")) // change the obstacle's height
         {
-            float newHeight = Tools.LimitedRandomVariance(intruder.GetComponent<RepositionCheckpoint>().GetLastObstacleHeight(), Consts.MIN_GAP_HEIGHT, Consts.MAX_GAP_HEIGHT, Consts.MAX_ABS_VARIANCE);
+            RepositionCheckpoint repositionCheckpoint = intruder.GetComponent<RepositionCheckpoint>();
+
+            float newHeight = Tools.LimitedRandomVariance(repositionCheckpoint.GetLastObstacleHeight(),
+                                                            Consts.MIN_GAP_HEIGHT,
+                                                            Consts.MAX_GAP_HEIGHT,
+                                                            Consts.MAX_ABS_VARIANCE);
+                                                            
             RepositionY(newHeight);
-            intruder.GetComponent<RepositionCheckpoint>().SetLastObstacleHeight(newHeight);
+
+            repositionCheckpoint.SetLastObstacleHeight(newHeight);
         }
         else if (intruder.layer == LayerMask.NameToLayer("Player")) // increment the score
         {
