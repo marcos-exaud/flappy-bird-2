@@ -55,11 +55,16 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method <c>WakeUp</c> Wakes up the rigidbody of the obstacle to allow physics simulation
+    /// </summary>
     public void WakeUp()
     {
         if (obstacle.IsSleeping())
         {
             obstacle.WakeUp();
+
+            // sets the obstacles velocity so it starts moving, allowing the player to clear it
             obstacle.velocity = new Vector2(-Consts.GAME_X_SCROLLING_SPEED, 0);
         }
     }
