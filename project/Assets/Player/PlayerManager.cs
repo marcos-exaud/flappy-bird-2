@@ -22,13 +22,23 @@ public class PlayerManager : MonoBehaviour
         return playerScore;
     }
 
+    /// <summary>
+    /// Method <c>Kill</c> Kills the player, invoking OnPlayerDeath event
+    /// </summary>
     public void Kill()
     {
-        // to do
-        Debug.Log("dies");
-        SceneManager.LoadScene("SingleplayerGameScene");
+        // sleeps the rigidbody of the player to disable physics simulation
+        bird.Sleep();
+
+        // disables player movement so the player can't continue playing after losing
+        gameObject.GetComponent<PlayerMovement>().enabled = false;
+
+        EventManager.OnPlayerDeath?.Invoke();
     }
 
+    /// <summary>
+    /// Method <c>WakeUp</c> Wakes up the rigidbody of the player to allow physics simulation
+    /// </summary>
     public void WakeUp()
     {
         if (bird.IsSleeping())
@@ -40,5 +50,10 @@ public class PlayerManager : MonoBehaviour
     public void IncrementScore()
     {
         playerScore++;
+    }
+
+    public bool PlayerIsAlive()
+    {
+        return bird.IsAwake();
     }
 }

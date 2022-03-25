@@ -6,4 +6,8 @@ using System;
 public class EventManager : MonoBehaviour
 {
     public static Action<GameObject> OnObstacleClear;
+
+    public static Action OnGameOver;
+
+    public static Action OnPlayerDeath;
 }

@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class ObstacleManager : MonoBehaviour
 {
-    [SerializeField]
-    // speed at which the obstacle moves
-    private float speed;
-
     // obstacle rigidbody
     private Rigidbody2D obstacle;
 
     void Start()
     {
         obstacle = GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()
+    {
+        EventManager.OnGameOver += Sleep;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnGameOver -= Sleep;
+    }
+
+    void OnDestroy()
+    {
+        EventManager.OnGameOver -= Sleep;
     }
 
     void OnTriggerEnter2D(Collider2D intruderCollider)
@@ -44,13 +55,23 @@ public class ObstacleManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Method <c>WakeUp</c> Wakes up the rigidbody of the obstacle to allow physics simulation
+    /// </summary>
     public void WakeUp()
     {
         if (obstacle.IsSleeping())
         {
             obstacle.WakeUp();
-            obstacle.velocity = new Vector2(-speed, 0);
+
+            // sets the obstacles velocity so it starts moving, allowing the player to clear it
+            obstacle.velocity = new Vector2(-Consts.GAME_X_SCROLLING_SPEED, 0);
         }
+    }
+
+    public void Sleep()
+    {
+        obstacle.Sleep();
     }
 
     // cycles the obstacle to the other side of game, effectively respawning it

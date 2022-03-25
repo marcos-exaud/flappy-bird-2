@@ -21,16 +21,19 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         EventManager.OnObstacleClear += IncrementPlayerScore;
+        EventManager.OnPlayerDeath += CheckForGameOver;
     }
 
     void OnDisable()
     {
         EventManager.OnObstacleClear -= IncrementPlayerScore;
+        EventManager.OnPlayerDeath -= CheckForGameOver;
     }
 
     void OnDestroy()
     {
         EventManager.OnObstacleClear -= IncrementPlayerScore;
+        EventManager.OnPlayerDeath -= CheckForGameOver;
     }
 
     private IEnumerator StartGame()
@@ -50,12 +53,25 @@ public class GameManager : MonoBehaviour
     }
 
     // clearer is the player who cleared the obstacle
-    public void IncrementPlayerScore(GameObject obstacleClearer)
+    private void IncrementPlayerScore(GameObject obstacleClearer)
     {
         GameObject player = players.Find((player) => player.name == obstacleClearer.name);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.IncrementScore();
 
         uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
+    }
+
+    private void CheckForGameOver()
+    {
+        // if any player is still alive, the game is not over
+        foreach (GameObject player in players)
+        {
+            PlayerManager playerManager = player.GetComponent<PlayerManager>();
+            if (playerManager.PlayerIsAlive()) return;
+        }
+
+        // otherwise, invoke the game over event
+        EventManager.OnGameOver?.Invoke();
     }
 }
