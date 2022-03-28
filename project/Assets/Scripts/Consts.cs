@@ -14,6 +14,8 @@ public static class Consts
     // scene values
     public static readonly int STARTING_SCENE = 0;
     public static readonly int BASE_GAME_SCENE = 1;
+    public static readonly int MULTIPLAYER_GAME_SCENE_1P = 2;
+    public static readonly int MULTIPLAYER_GAME_SCENE_2P = 3;
 
     // game's horizontal scrolling speed
     public static readonly float GAME_X_SCROLLING_SPEED = 5f;

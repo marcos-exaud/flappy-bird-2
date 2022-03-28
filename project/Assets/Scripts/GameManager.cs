@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private List<GameObject> players;
+    protected static List<GameObject> players;
 
     [SerializeField]
     private List<GameObject> obstacles;
@@ -13,19 +14,23 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject uiManager;
 
-    void Start()
+    protected virtual void Start()
     {
         StartCoroutine(StartGame());
     }
 
-    void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
+
         EventManager.OnObstacleClear += IncrementPlayerScore;
         EventManager.OnPlayerDeath += CheckForGameOver;
     }
 
-    void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
+
         EventManager.OnObstacleClear -= IncrementPlayerScore;
         EventManager.OnPlayerDeath -= CheckForGameOver;
     }
