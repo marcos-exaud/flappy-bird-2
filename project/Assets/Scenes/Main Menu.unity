@@ -1497,8 +1497,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 374988242}
-        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+      - m_Target: {fileID: 2081578708}
+        m_TargetAssemblyTypeName: ConnectionManager, Assembly-CSharp
         m_MethodName: Connect
         m_Mode: 1
         m_Arguments:
