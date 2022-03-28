@@ -20,16 +20,4 @@ public class MenuManager : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void Connect()
-    {
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.JoinRandomOrCreateRoom(null , 2);
-        }
-        else
-        {
-            PhotonNetwork.ConnectUsingSettings();
-        }
-    }
 }
