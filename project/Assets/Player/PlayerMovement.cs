@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPun
 {
     [SerializeField]
     // Force applied to rigidbody on player inout
-    private float flightForce;
+    private float flightForce = 5;
 
     [SerializeField]
     // Speed limit for upwards movement
-    private float maxSpeed;
+    private float maxSpeed = 7;
 
     [SerializeField]
     // Spped limit for downwards movement
-    private float minSpeed;
+    private float minSpeed = -7;
 
     // player rigidbody
     private Rigidbody2D bird;
@@ -24,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         bird = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -36,12 +37,12 @@ public class PlayerMovement : MonoBehaviour
         LimitSpeed(bird.velocity);
     }
 
-    private void Fly()
+    protected void Fly()
     {
         bird.AddForce(new Vector2(0, flightForce * bird.mass), ForceMode2D.Impulse);
     }
 
-    private void LimitSpeed(Vector2 velocity)
+    protected void LimitSpeed(Vector2 velocity)
     {
         bird.velocity = new Vector2(velocity.x, Mathf.Clamp(velocity.y, minSpeed, maxSpeed));
     }

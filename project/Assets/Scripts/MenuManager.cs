@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Photon.Pun;
 
 public class MenuManager : MonoBehaviour
 {
@@ -14,6 +11,11 @@ public class MenuManager : MonoBehaviour
     public void LoadMainMenu()
     {
         SceneManager.LoadScene(Consts.STARTING_SCENE);
+    }
+
+    public void Reload()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()

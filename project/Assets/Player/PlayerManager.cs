@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using Photon.Pun;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPun
 {
     // player rigidbody
-    private Rigidbody2D bird;
+    protected Rigidbody2D bird;
 
     private int playerScore;
 
-    void Start()
+    protected virtual void Start()
     {
         bird = GetComponent<Rigidbody2D>();
         playerScore = 0;
