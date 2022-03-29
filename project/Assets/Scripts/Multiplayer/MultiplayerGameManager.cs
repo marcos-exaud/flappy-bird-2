@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class MultiplayerGameManager : GameManager
 {
@@ -38,6 +39,7 @@ public class MultiplayerGameManager : GameManager
         base.OnEnable();
 
         EventManager.OnGameOver += StopGame;
+        PhotonNetwork.NetworkingClient.EventReceived += OnPhotonEvent;
     }
 
     public override void OnDisable()
@@ -45,6 +47,7 @@ public class MultiplayerGameManager : GameManager
         base.OnDisable();
 
         EventManager.OnGameOver -= StopGame;
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
     }
 
     protected override void OnDestroy()
@@ -52,6 +55,19 @@ public class MultiplayerGameManager : GameManager
         base.OnDestroy();
 
         EventManager.OnGameOver -= StopGame;
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+
+    public void OnPhotonEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+
+        switch (eventCode)
+        {
+            case EventManager.OnPlayerDeathPhotonEventCode:
+                CheckForGameOver();
+                break;
+        }
     }
 
     /// <summary>
@@ -130,17 +146,13 @@ public class MultiplayerGameManager : GameManager
     // clearer is the player who cleared the obstacle
     protected override void IncrementPlayerScore(GameObject obstacleClearer)
     {
-        GameObject player = PlayerList.players.Find((player) => player.name == obstacleClearer.name);
-
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        if (obstacleClearer.Equals(PlayerManagerMultiplayer.localPlayerInstance))
         {
-            return;
-        }
-        
-        PlayerManager playerManager = player.GetComponent<PlayerManager>();
-        playerManager.IncrementScore();
+            PlayerManager playerManager = obstacleClearer.GetComponent<PlayerManager>();
+            playerManager.IncrementScore();
 
-        uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
+            uiManager.GetComponent<UIManager>().UpdateScoreboard(obstacleClearer);
+        }
     }
 
     protected override void CheckForGameOver()

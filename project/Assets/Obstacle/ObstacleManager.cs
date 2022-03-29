@@ -27,7 +27,7 @@ public class ObstacleManager : MonoBehaviour
         EventManager.OnGameOver -= Sleep;
     }
 
-    void OnTriggerEnter2D(Collider2D intruderCollider)
+    protected virtual void OnTriggerEnter2D(Collider2D intruderCollider)
     {
         GameObject intruder = intruderCollider.gameObject;
 

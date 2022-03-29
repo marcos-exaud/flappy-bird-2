@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 using Photon.Pun;
 
 public class PlayerManagerMultiplayer : PlayerManager
@@ -9,12 +11,6 @@ public class PlayerManagerMultiplayer : PlayerManager
 
     [HideInInspector]
     public bool ready = false;
-
-    [PunRPC]
-    private void SetReady(bool ready)
-    {
-        this.ready = ready;
-    }
 
     protected override void Awake()
     {
@@ -53,11 +49,63 @@ public class PlayerManagerMultiplayer : PlayerManager
         StartCoroutine("WaitForReadyUp");
     }
 
+    void OnEnable()
+    {
+        EventManager.OnGameOver += FallAsleep;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnGameOver -= FallAsleep;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        
+        EventManager.OnGameOver -= FallAsleep;
+    }
+
+    [PunRPC]
+    private void SetReady(bool ready)
+    {
+        this.ready = ready;
+    }
+
     private IEnumerator WaitForReadyUp()
     {
         // wait for player to input first movement to start the game
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.UpArrow));
 
         photonView.RPC("SetReady", RpcTarget.All, true);
+    }
+
+    public override void IncrementScore()
+    {
+        if (photonView.IsMine) playerScore++;
+    }
+
+    /// <summary>
+    /// Method <c>Kill</c> Kills the player, invoking OnPlayerDeath event
+    /// </summary>
+    public override void Kill()
+    {
+        if (gameObject.Equals(PlayerManagerMultiplayer.localPlayerInstance))
+        {
+            // sleeps the rigidbody of the player to disable physics simulation
+            photonView.RPC("FallAsleep", RpcTarget.All);
+
+            // disables player movement so the player can't continue playing after losing
+            gameObject.GetComponent<PlayerMovement>().enabled = false;
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            PhotonNetwork.RaiseEvent(EventManager.OnPlayerDeathPhotonEventCode, null, raiseEventOptions, SendOptions.SendReliable);
+        }
+    }
+
+    [PunRPC]
+    private void FallAsleep()
+    {
+        bird.Sleep();
     }
 }
