@@ -43,5 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caaf4fa033c674223bb84e8498274a9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  players: []
+  playerPrefab: {fileID: 4778571370815798606, guid: b881b9e6542ef4ef88b78104273e3a23, type: 3}
   obstacles: []
+  uiManager: {fileID: 0}

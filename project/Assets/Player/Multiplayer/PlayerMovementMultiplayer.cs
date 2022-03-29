@@ -12,6 +12,6 @@ public class PlayerMovementMultiplayer : PlayerMovement
             return;
         }
 
-        base.Update();
+        if (MultiplayerGameManager.gameIsRunning) base.Update();
     }
 }

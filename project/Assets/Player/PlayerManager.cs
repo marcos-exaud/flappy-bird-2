@@ -12,10 +12,19 @@ public class PlayerManager : MonoBehaviourPun
 
     private int playerScore;
 
+    protected virtual void Awake()
+    {
+        PlayerList.players.Add(gameObject);
+    }
     protected virtual void Start()
     {
         bird = GetComponent<Rigidbody2D>();
         playerScore = 0;
+    }
+
+    void OnDestroy()
+    {
+        PlayerList.players.Remove(gameObject);
     }
 
     public int GetPlayerScore()
