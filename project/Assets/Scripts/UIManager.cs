@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -29,17 +27,17 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject progressLabel;
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         EventManager.OnGameOver += DisplayGameOverUI;
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
         EventManager.OnGameOver -= DisplayGameOverUI;
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         EventManager.OnGameOver -= DisplayGameOverUI;
     }
@@ -53,7 +51,7 @@ public class UIManager : MonoBehaviour
     }
 
     // display game over screen
-    private void DisplayGameOverUI()
+    public void DisplayGameOverUI()
     {
         gameOverUI.SetActive(true);
     }

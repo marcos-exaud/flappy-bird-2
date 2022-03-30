@@ -4,7 +4,7 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
 
-public class PlayerManagerMultiplayer : PlayerManager
+public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
 {
     [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
     public static GameObject localPlayerInstance;
@@ -51,19 +51,48 @@ public class PlayerManagerMultiplayer : PlayerManager
 
     void OnEnable()
     {
-        EventManager.OnGameOver += FallAsleep;
+        PhotonNetwork.NetworkingClient.EventReceived += OnPhotonEvent;
     }
 
     void OnDisable()
     {
-        EventManager.OnGameOver -= FallAsleep;
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        
-        EventManager.OnGameOver -= FallAsleep;
+
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+
+    public void OnPhotonEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+
+        switch (eventCode)
+        {
+            case EventManager.OnGameOverPhotonEventCode:
+                FallAsleep();
+                break;
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // We own this player: send the others our data
+            stream.SendNext(PlayerIsAlive());
+            stream.SendNext(gameObject.GetComponent<PlayerMovement>().enabled);
+        }
+        else
+        {
+            // Network player, receive data
+            bool playerIsAlive = (bool)stream.ReceiveNext();
+            if (!playerIsAlive && PlayerIsAlive()) FallAsleep();
+            gameObject.GetComponent<PlayerMovement>().enabled = (bool)stream.ReceiveNext();
+        }
     }
 
     [PunRPC]
@@ -90,7 +119,7 @@ public class PlayerManagerMultiplayer : PlayerManager
     /// </summary>
     public override void Kill()
     {
-        if (gameObject.Equals(PlayerManagerMultiplayer.localPlayerInstance))
+        if (gameObject.Equals(PlayerManagerMultiplayer.localPlayerInstance) && MultiplayerGameManager.gameIsRunning)
         {
             // sleeps the rigidbody of the player to disable physics simulation
             photonView.RPC("FallAsleep", RpcTarget.All);
@@ -98,14 +127,25 @@ public class PlayerManagerMultiplayer : PlayerManager
             // disables player movement so the player can't continue playing after losing
             gameObject.GetComponent<PlayerMovement>().enabled = false;
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            photonView.RPC("SetReady", RpcTarget.All, false);
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(EventManager.OnPlayerDeathPhotonEventCode, null, raiseEventOptions, SendOptions.SendReliable);
         }
     }
 
     [PunRPC]
-    private void FallAsleep()
+    public void FallAsleep()
     {
         bird.Sleep();
+    }
+
+    [PunRPC]
+    public void DestroyPlayerGameObject()
+    {
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(photonView);
+        }
     }
 }

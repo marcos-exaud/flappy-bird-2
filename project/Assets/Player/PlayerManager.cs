@@ -64,6 +64,10 @@ public class PlayerManager : MonoBehaviourPun
 
     public bool PlayerIsAlive()
     {
+        if (bird == null)
+        {
+            return false;
+        }
         return bird.IsAwake();
     }
 }

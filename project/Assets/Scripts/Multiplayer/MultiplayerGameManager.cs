@@ -10,7 +10,7 @@ public class MultiplayerGameManager : GameManager
 {
     [HideInInspector]
     public static bool gameIsRunning;
-    
+
     protected override void Start()
     {
         if (playerPrefab == null)
@@ -39,7 +39,6 @@ public class MultiplayerGameManager : GameManager
     {
         base.OnEnable();
 
-        EventManager.OnGameOver += StopGame;
         PhotonNetwork.NetworkingClient.EventReceived += OnPhotonEvent;
     }
 
@@ -47,7 +46,6 @@ public class MultiplayerGameManager : GameManager
     {
         base.OnDisable();
 
-        EventManager.OnGameOver -= StopGame;
         PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
     }
 
@@ -55,7 +53,6 @@ public class MultiplayerGameManager : GameManager
     {
         base.OnDestroy();
 
-        EventManager.OnGameOver -= StopGame;
         PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
     }
 
@@ -65,6 +62,9 @@ public class MultiplayerGameManager : GameManager
 
         switch (eventCode)
         {
+            case EventManager.OnGameOverPhotonEventCode:
+                StopGame();
+                break;
             case EventManager.OnPlayerDeathPhotonEventCode:
                 CheckForGameOver();
                 break;
@@ -111,6 +111,7 @@ public class MultiplayerGameManager : GameManager
         {
             Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
         }
+        DestroyAllPlayerGameObjects();
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
         PhotonNetwork.LoadLevel(Consts.MULTIPLAYER_GAME_SCENE_1P);
     }
@@ -166,11 +167,38 @@ public class MultiplayerGameManager : GameManager
         }
 
         // otherwise, invoke the game over event
-        EventManager.OnGameOver?.Invoke();
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(EventManager.OnGameOverPhotonEventCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
 
     private void StopGame()
     {
         gameIsRunning = false;
+    }
+
+    public static void DestroyAllPlayerGameObjects()
+    {
+        List<GameObject> players = PlayerList.players;
+        foreach (GameObject player in players)
+        {
+            player.GetPhotonView().RPC("DestroyPlayerGameObject", RpcTarget.All);
+        }
+    }
+
+    /// <summary>
+    /// Method <c>GetNextMultiplayerScene</c> Serves as a workaround to a problem with photon's LoadLevelIfSynced when trying to
+    /// load the same scene by alternating between two identical multiplayer scenes.
+    /// </summary>
+    public static int GetNextMultiplayerScene()
+    {
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        if (currentScene == Consts.MULTIPLAYER_GAME_SCENE_2P)
+        {
+            return Consts.MULTIPLAYER_GAME_SCENE_1P;
+        }
+        else
+        {
+            return Consts.MULTIPLAYER_GAME_SCENE_2P;
+        }
     }
 }

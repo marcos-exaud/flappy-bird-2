@@ -13,7 +13,7 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene(Consts.STARTING_SCENE);
     }
 
-    public void Reload()
+    public virtual void Reload()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
