@@ -43,6 +43,7 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
 
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
+            bird.isKinematic = true;
             return;
         }
 

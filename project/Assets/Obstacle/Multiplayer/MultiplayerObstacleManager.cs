@@ -1,10 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using ExitGames.Client.Photon;
 
 public class MultiplayerObstacleManager : ObstacleManager
 {
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        PhotonNetwork.NetworkingClient.EventReceived += OnPhotonEvent;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+
+    public void OnPhotonEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+
+        switch (eventCode)
+        {
+            case EventManager.OnGameOverPhotonEventCode:
+                FallAsleep();
+                break;
+        }
+    }
+
     protected override void OnTriggerEnter2D(Collider2D intruderCollider)
     {
         GameObject intruder = intruderCollider.gameObject;
@@ -22,7 +54,7 @@ public class MultiplayerObstacleManager : ObstacleManager
                                                             Consts.MIN_GAP_HEIGHT,
                                                             Consts.MAX_GAP_HEIGHT,
                                                             Consts.MAX_ABS_VARIANCE);
-                                                            
+
             photonView.RPC("RepositionY", RpcTarget.All, newHeight);
 
             repositionCheckpoint.SetLastObstacleHeight(newHeight);
@@ -38,5 +70,11 @@ public class MultiplayerObstacleManager : ObstacleManager
     public override void RepositionY(float value)
     {
         obstacle.position = new Vector2(obstacle.position.x, value);
+    }
+
+    public void FallAsleep()
+    {
+        obstacle.Sleep();
+        obstacle.velocity = new Vector2(0f, 0f);
     }
 }
