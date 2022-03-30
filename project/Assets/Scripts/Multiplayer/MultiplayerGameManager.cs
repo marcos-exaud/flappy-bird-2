@@ -10,6 +10,7 @@ public class MultiplayerGameManager : GameManager
 {
     [HideInInspector]
     public static bool gameIsRunning;
+    
     protected override void Start()
     {
         if (playerPrefab == null)

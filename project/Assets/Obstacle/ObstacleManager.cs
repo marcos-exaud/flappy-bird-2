@@ -1,28 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class ObstacleManager : MonoBehaviour
+public class ObstacleManager : MonoBehaviourPun
 {
     // obstacle rigidbody
-    private Rigidbody2D obstacle;
+    protected Rigidbody2D obstacle;
 
     void Start()
     {
         obstacle = GetComponent<Rigidbody2D>();
     }
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         EventManager.OnGameOver += Sleep;
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
         EventManager.OnGameOver -= Sleep;
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         EventManager.OnGameOver -= Sleep;
     }
@@ -81,7 +82,7 @@ public class ObstacleManager : MonoBehaviour
     }
 
     // repositions the obstacle in the y axis
-    public void RepositionY(float value)
+    public virtual void RepositionY(float value)
     {
         obstacle.position = new Vector2(obstacle.position.x, value);
     }
