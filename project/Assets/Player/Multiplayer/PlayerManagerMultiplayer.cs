@@ -122,13 +122,7 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
     {
         if (gameObject.Equals(PlayerManagerMultiplayer.localPlayerInstance) && MultiplayerGameManager.gameIsRunning)
         {
-            // sleeps the rigidbody of the player to disable physics simulation
-            photonView.RPC("FallAsleep", RpcTarget.All);
-
-            // disables player movement so the player can't continue playing after losing
-            gameObject.GetComponent<PlayerMovement>().enabled = false;
-
-            photonView.RPC("SetReady", RpcTarget.All, false);
+            DestroyPlayerGameObject();
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
             PhotonNetwork.RaiseEvent(EventManager.OnPlayerDeathPhotonEventCode, null, raiseEventOptions, SendOptions.SendReliable);
