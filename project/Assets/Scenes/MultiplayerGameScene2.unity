@@ -559,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1342963903241070774, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5194199457554052512, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: m_RootOrder
@@ -1002,7 +1002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1342963903241070774, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: sceneViewId
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5194199457554052512, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: m_RootOrder
@@ -1898,7 +1898,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1342963903241070774, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: sceneViewId
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5194199457554052512, guid: 94d50e0b6230e4caaa31cd55e7df5512, type: 3}
       propertyPath: m_RootOrder

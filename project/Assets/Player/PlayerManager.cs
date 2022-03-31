@@ -10,12 +10,21 @@ public class PlayerManager : MonoBehaviourPun
     // player rigidbody
     protected Rigidbody2D bird;
 
-    private int playerScore;
+    protected int playerScore;
 
+    protected virtual void Awake()
+    {
+        PlayerList.players.Add(gameObject);
+    }
     protected virtual void Start()
     {
         bird = GetComponent<Rigidbody2D>();
         playerScore = 0;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        PlayerList.players.Remove(gameObject);
     }
 
     public int GetPlayerScore()
@@ -26,7 +35,7 @@ public class PlayerManager : MonoBehaviourPun
     /// <summary>
     /// Method <c>Kill</c> Kills the player, invoking OnPlayerDeath event
     /// </summary>
-    public void Kill()
+    public virtual void Kill()
     {
         // sleeps the rigidbody of the player to disable physics simulation
         bird.Sleep();
@@ -48,13 +57,17 @@ public class PlayerManager : MonoBehaviourPun
         }
     }
 
-    public void IncrementScore()
+    public virtual void IncrementScore()
     {
         playerScore++;
     }
 
     public bool PlayerIsAlive()
     {
+        if (bird == null)
+        {
+            return false;
+        }
         return bird.IsAwake();
     }
 }

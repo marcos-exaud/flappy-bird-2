@@ -5,17 +5,19 @@ using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    protected static List<GameObject> players;
+    [Tooltip("The prefab to use for representing the player")]
+    public GameObject playerPrefab;
 
     [SerializeField]
-    private List<GameObject> obstacles;
+    protected List<GameObject> obstacles;
 
     [SerializeField]
-    private GameObject uiManager;
+    protected GameObject uiManager;
 
     protected virtual void Start()
     {
+        GameObject player = GameObject.Instantiate(playerPrefab, new Vector2(-5f, 0f), Quaternion.identity);
+
         StartCoroutine(StartGame());
     }
 
@@ -35,19 +37,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         EventManager.OnPlayerDeath -= CheckForGameOver;
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         EventManager.OnObstacleClear -= IncrementPlayerScore;
         EventManager.OnPlayerDeath -= CheckForGameOver;
     }
 
-    private IEnumerator StartGame()
+    protected virtual IEnumerator StartGame()
     {
         // wait for player to input first movement to start the game
         yield return new WaitUntil( () => Input.GetKeyDown(KeyCode.UpArrow));
 
         // wake up all players and obstacles to properly start the game
-        foreach (GameObject player in players)
+        foreach (GameObject player in PlayerList.players)
         {
             player.GetComponent<PlayerManager>().WakeUp();
         }
@@ -58,19 +60,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     // clearer is the player who cleared the obstacle
-    private void IncrementPlayerScore(GameObject obstacleClearer)
+    protected virtual void IncrementPlayerScore(GameObject obstacleClearer)
     {
-        GameObject player = players.Find((player) => player.name == obstacleClearer.name);
+        GameObject player = PlayerList.players.Find((player) => player.name == obstacleClearer.name);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.IncrementScore();
 
         uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
     }
 
-    private void CheckForGameOver()
+    protected virtual void CheckForGameOver()
     {
         // if any player is still alive, the game is not over
-        foreach (GameObject player in players)
+        foreach (GameObject player in PlayerList.players)
         {
             PlayerManager playerManager = player.GetComponent<PlayerManager>();
             if (playerManager.PlayerIsAlive()) return;
