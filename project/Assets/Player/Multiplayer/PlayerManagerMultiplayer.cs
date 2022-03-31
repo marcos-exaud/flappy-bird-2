@@ -107,6 +107,8 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
         // wait for player to input first movement to start the game
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.UpArrow));
 
+        EventManager.OnPlayerReadyUp?.Invoke();
+
         photonView.RPC("SetReady", RpcTarget.All, true);
     }
 

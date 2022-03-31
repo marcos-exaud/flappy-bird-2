@@ -126,6 +126,8 @@ public class MultiplayerGameManager : GameManager
     {
         yield return new WaitUntil(() => AllPlayersReady());
 
+        yield return uiManager.GetComponent<MultiplayerUIManager>().Countdown();
+
         // wake up all players and obstacles to properly start the game
         foreach (GameObject player in PlayerList.players)
         {

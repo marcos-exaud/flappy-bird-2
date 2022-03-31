@@ -12,4 +12,6 @@ public class EventManager : MonoBehaviour
 
     public const byte OnPlayerDeathPhotonEventCode = 3;
     public static Action OnPlayerDeath;
+
+    public static Action OnPlayerReadyUp;
 }
