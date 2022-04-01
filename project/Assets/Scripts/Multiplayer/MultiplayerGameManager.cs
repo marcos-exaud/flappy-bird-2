@@ -25,6 +25,7 @@ public class MultiplayerGameManager : GameManager
                 Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                 GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, new Vector2(-5f, 0f), Quaternion.identity, 0);
+                player.GetPhotonView().RPC("DisplayNickname", RpcTarget.Others);
             }
             else
             {
@@ -128,7 +129,7 @@ public class MultiplayerGameManager : GameManager
         }
         DestroyAllPlayerGameObjects();
         Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-        PhotonNetwork.LoadLevel(Consts.MULTIPLAYER_GAME_SCENE_1P);
+        PhotonNetwork.LoadLevel(MultiplayerGameManager.GetNextMultiplayerScene());
     }
 
     protected override IEnumerator StartGame()

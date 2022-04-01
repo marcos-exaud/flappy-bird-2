@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
@@ -149,5 +150,12 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
         {
             PhotonNetwork.Destroy(photonView);
         }
+    }
+
+    [PunRPC]
+    public void DisplayNickname()
+    {
+        TextMeshPro nicknameLabel = GetComponentInChildren<TextMeshPro>();
+        nicknameLabel.SetText(photonView.Owner.NickName);
     }
 }

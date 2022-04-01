@@ -2936,7 +2936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 1998111705}
-  maxPlayersPerRoom: 2
+  maxPlayersPerRoom: 4
 --- !u!4 &2081578709
 Transform:
   m_ObjectHideFlags: 0
