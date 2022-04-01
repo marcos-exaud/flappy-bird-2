@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MultiplayerGameManager : GameManager
 {
@@ -30,6 +31,14 @@ public class MultiplayerGameManager : GameManager
                 Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
             }
         }
+
+        Hashtable hash = new Hashtable();
+        hash.Add("Rematch", false);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        hash = new Hashtable();
+        hash.Add("Score", 0);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
         gameIsRunning = false;
         StartCoroutine(StartGame());

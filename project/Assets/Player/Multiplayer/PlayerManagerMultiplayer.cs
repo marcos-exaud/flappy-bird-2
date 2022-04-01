@@ -3,6 +3,7 @@ using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
 {
@@ -124,6 +125,10 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
     {
         if (gameObject.Equals(PlayerManagerMultiplayer.localPlayerInstance) && MultiplayerGameManager.gameIsRunning)
         {
+            Hashtable hash = new Hashtable();
+            hash.Add("Score", playerScore);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
             DestroyPlayerGameObject();
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };

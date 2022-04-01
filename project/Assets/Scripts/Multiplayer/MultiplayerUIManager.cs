@@ -6,6 +6,10 @@ using ExitGames.Client.Photon;
 
 public class MultiplayerUIManager : UIManager
 {
+    [Tooltip("The Ui Panel containing the rematch menu")]
+    [SerializeField]
+    private GameObject rematchUI;
+
     [SerializeField]
     private TextMeshProUGUI readyUpLabel;
     [SerializeField]
@@ -84,5 +88,11 @@ public class MultiplayerUIManager : UIManager
         readyUpCountdown.SetText("GO!");
         yield return new WaitForSeconds(2f);
         readyUpCountdown.enabled = false;
+    }
+
+    public void ToggleRematchUI()
+    {
+        gameOverUI.SetActive(false);
+        rematchUI.SetActive(true);
     }
 }

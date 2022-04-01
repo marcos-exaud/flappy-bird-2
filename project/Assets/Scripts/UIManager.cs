@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("The Ui Panel containing the game over menu")]
     [SerializeField]
-    private GameObject gameOverUI;
+    protected GameObject gameOverUI;
 
     [Tooltip("The Ui Panel containing the multiplayer menu")]
     [SerializeField]
