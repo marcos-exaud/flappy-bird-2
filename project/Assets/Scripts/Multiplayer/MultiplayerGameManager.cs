@@ -9,7 +9,7 @@ using ExitGames.Client.Photon;
 public class MultiplayerGameManager : GameManager
 {
     [HideInInspector]
-    public static bool gameIsRunning;
+    public static bool gameIsRunning = false;
 
     protected override void Start()
     {
@@ -33,6 +33,12 @@ public class MultiplayerGameManager : GameManager
 
         gameIsRunning = false;
         StartCoroutine(StartGame());
+    }
+
+    void Update()
+    {
+        // sanity check in case game over isnt detected correctly
+        if (gameIsRunning && PhotonNetwork.IsMasterClient && PlayerList.players.Count == 0) CheckForGameOver();
     }
 
     public override void OnEnable()
@@ -120,8 +126,6 @@ public class MultiplayerGameManager : GameManager
     {
         yield return new WaitUntil(() => AllPlayersReady());
 
-        Debug.Log("all players are ready");
-
         // wake up all players and obstacles to properly start the game
         foreach (GameObject player in PlayerList.players)
         {
@@ -137,7 +141,12 @@ public class MultiplayerGameManager : GameManager
 
     private bool AllPlayersReady()
     {
-        foreach (GameObject player in PlayerList.players)
+        List<GameObject> players = PlayerList.players;
+
+        // players cant be ready if there arent any
+        if (players.Count == 0) return false;
+
+        foreach (GameObject player in players)
         {
             PlayerManagerMultiplayer playerManager = player.GetComponent<PlayerManagerMultiplayer>();
             if (!playerManager.ready) return false;
@@ -159,12 +168,8 @@ public class MultiplayerGameManager : GameManager
 
     protected override void CheckForGameOver()
     {
-        // if any player is still alive, the game is not over
-        foreach (GameObject player in PlayerList.players)
-        {
-            PlayerManager playerManager = player.GetComponent<PlayerManager>();
-            if (playerManager.PlayerIsAlive()) return;
-        }
+        // players are destroyed on death, so there must be no players left before triggering game over
+        if (PlayerList.players.Count > 0) return;
 
         // otherwise, invoke the game over event
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
