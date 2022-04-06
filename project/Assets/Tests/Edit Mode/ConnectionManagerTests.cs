@@ -38,7 +38,6 @@ public class ConnectionManagerTests
         // Substitutes
         uiManager = Substitute.For<GameObjectWrapper>();
         pun = Substitute.For<PhotonNetworkWrapper>();
-        gameVersion = "2";
     }
 
     [Test]
@@ -63,6 +62,8 @@ public class ConnectionManagerTests
     public void _1_2_Test_Connect_is_not_connceted_to_photon_network()
     {
         //Arrange
+        ReflectionUtils.SetValue(manager, "gameVersion", "2");
+
         UIManager uiManagerMockComponent = Substitute.For<UIManager>();
         uiManagerMockComponent.When(x => x.ToggleMainMenuMultiplayerProgressUI()).DoNotCallBase();
         uiManager.GetComponent<UIManager>().Returns<UIManager>(uiManagerMockComponent);
@@ -78,5 +79,34 @@ public class ConnectionManagerTests
         ReflectionUtils.AssertMethodIsCalled(pun, "ConnectUsingSettings");
         Assert.AreEqual(true, ReflectionUtils.GetValue<bool>(manager, "isConnecting"));
         Assert.AreEqual("2", ReflectionUtils.GetValue<PhotonNetworkWrapper>(manager, "punWrapper").GameVersion);
+    }
+
+    [Test]
+    public void _2_1_Test_OnConnectedToMaster_is_connecting()
+    {
+        //Arrange
+        ReflectionUtils.SetValue(manager, "isConnecting", true);
+
+        pun.When(x => x.JoinRandomRoom()).DoNotCallBase();
+
+        //Act
+        ReflectionUtils.Invoke(manager, "OnConnectedToMaster");
+
+        //Assert
+        ReflectionUtils.AssertMethodIsCalled(pun, "JoinRandomRoom");
+        Assert.AreEqual(false, ReflectionUtils.GetValue<bool>(manager, "isConnecting"));
+    }
+
+    [Test]
+    public void _2_2_Test_OnConnectedToMaster_is_not_connecting()
+    {
+        //Arrange
+        ReflectionUtils.SetValue(manager, "isConnecting", false);
+
+        //Act
+        ReflectionUtils.Invoke(manager, "OnConnectedToMaster");
+
+        //Assert
+        ReflectionUtils.AssertMethodIsNotCalled(pun, "JoinRandomRoom");
     }
 }
