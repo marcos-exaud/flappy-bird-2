@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Method <c>ToggleMainMenuMultiplayerProgressUI</c> Toggles the connection progress label
     /// </summary>
-    public void ToggleMainMenuMultiplayerProgressUI()
+    public virtual void ToggleMainMenuMultiplayerProgressUI()
     {
         bool progressLabelIsToggled = progressLabel.activeSelf;
         progressLabel.SetActive(!progressLabelIsToggled);
