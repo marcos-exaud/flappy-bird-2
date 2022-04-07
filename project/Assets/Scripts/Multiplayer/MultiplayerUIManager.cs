@@ -20,8 +20,10 @@ public class MultiplayerUIManager : UIManager
     [SerializeField]
     private string playerReadyLabel = "You are ready! Waiting for other players...";
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         readyUpLabel.SetText(readyUpPrompt);
     }
 

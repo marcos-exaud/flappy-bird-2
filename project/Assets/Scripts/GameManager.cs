@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     protected virtual IEnumerator StartGame()
     {
         // wait for player to input first movement to start the game
-        yield return new WaitUntil( () => Input.GetKeyDown(KeyCode.UpArrow));
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.UpArrow));
 
         // wake up all players and obstacles to properly start the game
         foreach (GameObject player in PlayerList.players)
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.IncrementScore();
 
-        uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
+        uiManager.GetComponent<UIManager>().UpdateScoreboard(new GameObjectWrapper(player));
     }
 
     protected virtual void CheckForGameOver()

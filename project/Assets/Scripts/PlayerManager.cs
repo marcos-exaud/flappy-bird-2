@@ -27,7 +27,7 @@ public class PlayerManager : MonoBehaviourPun
         PlayerList.players.Remove(gameObject);
     }
 
-    public int GetPlayerScore()
+    public virtual int GetPlayerScore()
     {
         return playerScore;
     }

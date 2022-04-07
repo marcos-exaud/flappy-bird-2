@@ -27,6 +27,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject progressLabel;
 
+    // Wrappers
+    private GameObjectWrapper gameOverUIWrapper;
+    private GameObjectWrapper multiplayerMenuUIWrapper;
+    private GameObjectWrapper defaultMenuUIWrapper;
+    private GameObjectWrapper controlPanelWrapper;
+    private GameObjectWrapper progressLabelWrapper;
+
+    protected virtual void Start()
+    {
+        InitWrappers();
+    }
+
     protected virtual void OnEnable()
     {
         EventManager.OnGameOver += DisplayGameOverUI;
@@ -42,7 +54,16 @@ public class UIManager : MonoBehaviour
         EventManager.OnGameOver -= DisplayGameOverUI;
     }
 
-    public void UpdateScoreboard(GameObject player)
+    private void InitWrappers()
+    {
+        gameOverUIWrapper = new GameObjectWrapper(gameOverUI);
+        multiplayerMenuUIWrapper = new GameObjectWrapper(multiplayerMenuUI);
+        defaultMenuUIWrapper = new GameObjectWrapper(defaultMenuUI);
+        controlPanelWrapper = new GameObjectWrapper(controlPanel);
+        progressLabelWrapper = new GameObjectWrapper(progressLabel);
+    }
+
+    public void UpdateScoreboard(GameObjectWrapper player)
     {
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         int clearerScore = playerManager.GetPlayerScore();
@@ -53,7 +74,7 @@ public class UIManager : MonoBehaviour
     // display game over screen
     public void DisplayGameOverUI()
     {
-        gameOverUI.SetActive(true);
+        gameOverUIWrapper.SetActive(true);
     }
 
     /// <summary>
@@ -61,9 +82,9 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ToggleMainMenuMultiplayerUI()
     {
-        bool multiplayerUIIsToggled = multiplayerMenuUI.activeSelf;
-        multiplayerMenuUI.SetActive(!multiplayerUIIsToggled);
-        defaultMenuUI.SetActive(multiplayerUIIsToggled);
+        bool multiplayerUIIsToggled = multiplayerMenuUIWrapper.activeSelf;
+        multiplayerMenuUIWrapper.SetActive(!multiplayerUIIsToggled);
+        defaultMenuUIWrapper.SetActive(multiplayerUIIsToggled);
 
     }
 
@@ -72,8 +93,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public virtual void ToggleMainMenuMultiplayerProgressUI()
     {
-        bool progressLabelIsToggled = progressLabel.activeSelf;
-        progressLabel.SetActive(!progressLabelIsToggled);
-        controlPanel.SetActive(progressLabelIsToggled);
+        bool progressLabelIsToggled = progressLabelWrapper.activeSelf;
+        progressLabelWrapper.SetActive(!progressLabelIsToggled);
+        controlPanelWrapper.SetActive(progressLabelIsToggled);
     }
 }

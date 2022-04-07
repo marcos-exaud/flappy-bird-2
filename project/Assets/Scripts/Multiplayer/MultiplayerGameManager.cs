@@ -174,7 +174,7 @@ public class MultiplayerGameManager : GameManager
             PlayerManager playerManager = obstacleClearer.GetComponent<PlayerManager>();
             playerManager.IncrementScore();
 
-            uiManager.GetComponent<UIManager>().UpdateScoreboard(obstacleClearer);
+            uiManager.GetComponent<UIManager>().UpdateScoreboard(new GameObjectWrapper(obstacleClearer));
         }
     }
 

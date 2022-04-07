@@ -16,6 +16,11 @@ public class GameObjectWrapper
         this.gameObject = gameObject;
     }
 
+    public virtual bool activeSelf
+    {
+        get { return gameObject.activeSelf; }
+    }
+
     public virtual void SetActive(bool value)
     {
         gameObject.SetActive(value);
