@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Scripts",
         "TestUtils",
-        "PhotonUnityNetworking"
+        "PhotonUnityNetworking",
+        "PhotonRealtime"
     ],
     "includePlatforms": [
         "Editor"

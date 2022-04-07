@@ -7,6 +7,8 @@ using NSubstitute;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Photon.Pun;
+using Photon.Realtime;
+using System.Linq;
 
 public class ConnectionManagerTests
 {
@@ -25,9 +27,9 @@ public class ConnectionManagerTests
         //Variable Reflexion attribution
         ReflectionUtils.SetValue(manager, "uiManagerWrapper", uiManager);
         ReflectionUtils.SetValue(manager, "punWrapper", pun);
-        ReflectionUtils.SetValue(manager, "isConnecting", isConnecting);
+        /*ReflectionUtils.SetValue(manager, "isConnecting", isConnecting);
         ReflectionUtils.SetValue(manager, "maxPlayersPerRoom", maxPlayersPerRoom);
-        ReflectionUtils.SetValue(manager, "gameVersion", gameVersion);
+        ReflectionUtils.SetValue(manager, "gameVersion", gameVersion);*/
     }
 
     public void InitComponents()
@@ -108,5 +110,51 @@ public class ConnectionManagerTests
 
         //Assert
         ReflectionUtils.AssertMethodIsNotCalled(pun, "JoinRandomRoom");
+    }
+
+    [Test]
+    public void _3_Test_OnDisconnected()
+    {
+        //Arrange
+        ReflectionUtils.SetValue(manager, "isConnecting", true);
+
+        UIManager uiManagerMockComponent = Substitute.For<UIManager>();
+        uiManagerMockComponent.When(x => x.ToggleMainMenuMultiplayerProgressUI()).DoNotCallBase();
+        uiManager.GetComponent<UIManager>().Returns<UIManager>(uiManagerMockComponent);
+
+        //Act
+        ReflectionUtils.Invoke(manager, "OnDisconnected", new object[] { null });
+
+        //Assert
+        Assert.AreEqual(false, ReflectionUtils.GetValue<bool>(manager, "isConnecting"));
+    }
+
+    [Test]
+    public void _4_1_Test_OnJoinedRoom_first_player_in_room()
+    {
+        //Arrange
+        pun.When(x => x.LoadLevel(Arg.Any<int>())).DoNotCallBase();
+        manager.When(x => x.CurrentRoomPlayerCount()).DoNotCallBase();
+        manager.CurrentRoomPlayerCount().Returns<byte>(1);
+
+        //Act
+        ReflectionUtils.Invoke(manager, "OnJoinedRoom");
+
+        //Assert
+        ReflectionUtils.AssertMethodIsCalled(pun, "LoadLevel", new object[] { Consts.MULTIPLAYER_GAME_SCENE_1P });
+    }
+
+    [Test]
+    public void _4_2_Test_OnJoinedRoom_is_not_first_player_in_room()
+    {
+        //Arrange
+        manager.When(x => x.CurrentRoomPlayerCount()).DoNotCallBase();
+        manager.CurrentRoomPlayerCount().Returns<byte>(2);
+
+        //Act
+        ReflectionUtils.Invoke(manager, "OnJoinedRoom");
+
+        //Assert
+        ReflectionUtils.AssertMethodIsNotCalled(pun, "LoadLevel", new object[] { Arg.Any<int>() });
     }
 }

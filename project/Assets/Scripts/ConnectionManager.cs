@@ -78,7 +78,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
 
         // We only load if we are the first player, else we rely on `PhotonNetwork.AutomaticallySyncScene` to sync our instance scene.
-        if (punWrapper.CurrentRoom.PlayerCount == 1)
+        if (CurrentRoomPlayerCount() == 1)
         {
             Debug.Log("We load the 1 player multiplayer scene.");
 
@@ -86,6 +86,11 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             // Load the Room Level.
             punWrapper.LoadLevel(Consts.MULTIPLAYER_GAME_SCENE_1P);
         }
+    }
+
+    public virtual byte CurrentRoomPlayerCount()
+    {
+        return punWrapper.CurrentRoom.PlayerCount;
     }
 
     private void InitWrappers()
