@@ -5,7 +5,7 @@ using System;
 
 public class EventManager : MonoBehaviour
 {
-    public static Action<GameObject> OnObstacleClear;
+    public static Action<GameObjectWrapper> OnObstacleClear;
 
     public const byte OnGameOverPhotonEventCode = 2;
     public static Action OnGameOver;

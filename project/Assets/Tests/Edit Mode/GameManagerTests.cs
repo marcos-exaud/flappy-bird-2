@@ -9,7 +9,7 @@ public class GameManagerTests
 {
     private GameManager manager;
     private List<GameObject> obstacles;
-    private GameObject uiManager;
+    private GameObjectWrapper uiManager;
     private InputWrapper inputWrapper;
 
     [SetUp]
@@ -18,7 +18,7 @@ public class GameManagerTests
         InitComponents();
 
         //Variable Reflexion attribution
-        //ReflectionUtils.SetValue(manager, "uiManager", uiManager);
+        ReflectionUtils.SetValue(manager, "uiManagerWrapper", uiManager);
         ReflectionUtils.SetValue(manager, "inputWrapper", inputWrapper);
         //ReflectionUtils.SetValue(manager, "punWrapper", pun);
     }
@@ -29,7 +29,7 @@ public class GameManagerTests
         manager = Substitute.ForPartsOf<GameManager>();
 
         // Substitutes
-        //uiManager = Substitute.For<GameObject>();
+        uiManager = Substitute.For<GameObjectWrapper>();
         inputWrapper = Substitute.For<InputWrapper>();
         //pun = Substitute.For<PhotonNetworkWrapper>();
     }
@@ -53,6 +53,7 @@ public class GameManagerTests
         //Act
         ReflectionUtils.Invoke(manager, "CheckForGameOver");
         EventManager.OnGameOver -= EventRaised;
+        PlayerList.players.Remove(player);
 
         //Assert
         Assert.AreEqual(true, eventRaised);
@@ -77,8 +78,33 @@ public class GameManagerTests
         //Act
         ReflectionUtils.Invoke(manager, "CheckForGameOver");
         EventManager.OnGameOver -= EventRaised;
+        PlayerList.players.Remove(player);
 
         //Assert
         Assert.AreEqual(false, eventRaised);
+    }
+
+    [Test]
+    public void _2_Test_IncrementPlayerScore()
+    {
+        //Arrange
+        PlayerManager playerManager = Substitute.For<PlayerManager>();
+        GameObjectWrapper player = Substitute.For<GameObjectWrapper>();
+
+        playerManager.When(x => x.IncrementScore()).DoNotCallBase();
+        player.GetComponent<PlayerManager>().Returns(playerManager);
+
+        PlayerList.players.Add(player);
+
+        UIManager uiManagerMockComponent = Substitute.For<UIManager>();
+        uiManagerMockComponent.When(x => x.UpdateScoreboard(Arg.Any<GameObjectWrapper>())).DoNotCallBase();
+        uiManager.GetComponent<UIManager>().Returns(uiManagerMockComponent);
+
+        //Act
+        ReflectionUtils.Invoke(manager, "IncrementPlayerScore", new object[] { player });
+        PlayerList.players.Remove(player);
+
+        //Assert
+        ReflectionUtils.AssertMethodIsCalled(uiManagerMockComponent, "UpdateScoreboard", new object[] { player });
     }
 }

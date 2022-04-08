@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     // Wrappers
     protected InputWrapper inputWrapper;
+    protected GameObjectWrapper uiManagerWrapper;
 
     protected virtual void Start()
     {
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     protected virtual void InitWrappers()
     {
         if (inputWrapper == null) inputWrapper = new InputWrapper();
+        uiManagerWrapper = new GameObjectWrapper(uiManager);
     }
 
     protected virtual IEnumerator StartGame()
@@ -70,13 +72,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     // clearer is the player who cleared the obstacle
-    protected virtual void IncrementPlayerScore(GameObject obstacleClearer)
+    protected virtual void IncrementPlayerScore(GameObjectWrapper obstacleClearer)
     {
-        GameObjectWrapper player = PlayerList.players.Find((player) => player.gameObject.name == obstacleClearer.name);
+        GameObjectWrapper player = PlayerList.players.Find((player) => player.gameObject.name == obstacleClearer.gameObject.name);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.IncrementScore();
 
-        uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
+        uiManagerWrapper.GetComponent<UIManager>().UpdateScoreboard(player);
     }
 
     protected virtual void CheckForGameOver()

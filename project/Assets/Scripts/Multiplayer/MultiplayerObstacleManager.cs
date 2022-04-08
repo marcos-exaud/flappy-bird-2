@@ -61,7 +61,7 @@ public class MultiplayerObstacleManager : ObstacleManager
         }
         else if (intruder.layer == LayerMask.NameToLayer("Player") && intruder.GetComponent<PhotonView>().IsMine) // increment the score
         {
-            EventManager.OnObstacleClear?.Invoke(intruder);
+            EventManager.OnObstacleClear?.Invoke(new GameObjectWrapper(intruder));
         }
     }
 

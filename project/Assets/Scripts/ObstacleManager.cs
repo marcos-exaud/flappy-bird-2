@@ -52,7 +52,7 @@ public class ObstacleManager : MonoBehaviourPun
         }
         else if (intruder.layer == LayerMask.NameToLayer("Player")) // increment the score
         {
-            EventManager.OnObstacleClear?.Invoke(intruder);
+            EventManager.OnObstacleClear?.Invoke(new GameObjectWrapper(intruder));
         }
     }
 

@@ -167,14 +167,14 @@ public class MultiplayerGameManager : GameManager
     }
 
     // clearer is the player who cleared the obstacle
-    protected override void IncrementPlayerScore(GameObject obstacleClearer)
+    protected override void IncrementPlayerScore(GameObjectWrapper obstacleClearer)
     {
         if (obstacleClearer.Equals(PlayerManagerMultiplayer.localPlayerInstance))
         {
             PlayerManager playerManager = obstacleClearer.GetComponent<PlayerManager>();
             playerManager.IncrementScore();
 
-            uiManager.GetComponent<UIManager>().UpdateScoreboard(new GameObjectWrapper(obstacleClearer));
+            uiManager.GetComponent<UIManager>().UpdateScoreboard(obstacleClearer);
         }
     }
 
