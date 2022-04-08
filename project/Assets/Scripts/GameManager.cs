@@ -14,9 +14,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField]
     protected GameObject uiManager;
 
+    // Wrappers
+    protected InputWrapper inputWrapper;
+
     protected virtual void Start()
     {
         GameObject player = GameObject.Instantiate(playerPrefab, new Vector2(-5f, 0f), Quaternion.identity);
+
+        InitWrappers();
 
         StartCoroutine(StartGame());
     }
@@ -43,13 +48,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         EventManager.OnPlayerDeath -= CheckForGameOver;
     }
 
+    protected virtual void InitWrappers()
+    {
+        if (inputWrapper == null) inputWrapper = new InputWrapper();
+    }
+
     protected virtual IEnumerator StartGame()
     {
         // wait for player to input first movement to start the game
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.UpArrow));
+        yield return new WaitUntil(() => inputWrapper.GetKeyDown(KeyCode.UpArrow));
 
         // wake up all players and obstacles to properly start the game
-        foreach (GameObject player in PlayerList.players)
+        foreach (GameObjectWrapper player in PlayerList.players)
         {
             player.GetComponent<PlayerManager>().WakeUp();
         }
@@ -62,17 +72,17 @@ public class GameManager : MonoBehaviourPunCallbacks
     // clearer is the player who cleared the obstacle
     protected virtual void IncrementPlayerScore(GameObject obstacleClearer)
     {
-        GameObject player = PlayerList.players.Find((player) => player.name == obstacleClearer.name);
+        GameObjectWrapper player = PlayerList.players.Find((player) => player.gameObject.name == obstacleClearer.name);
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         playerManager.IncrementScore();
 
-        uiManager.GetComponent<UIManager>().UpdateScoreboard(new GameObjectWrapper(player));
+        uiManager.GetComponent<UIManager>().UpdateScoreboard(player);
     }
 
     protected virtual void CheckForGameOver()
     {
         // if any player is still alive, the game is not over
-        foreach (GameObject player in PlayerList.players)
+        foreach (GameObjectWrapper player in PlayerList.players)
         {
             PlayerManager playerManager = player.GetComponent<PlayerManager>();
             if (playerManager.PlayerIsAlive()) return;

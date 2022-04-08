@@ -12,19 +12,28 @@ public class PlayerManager : MonoBehaviourPun
 
     protected int playerScore;
 
+    protected GameObjectWrapper gameObjectWrapper;
+
     protected virtual void Awake()
     {
-        PlayerList.players.Add(gameObject);
+        InitWrappers();
+
+        PlayerList.players.Add(gameObjectWrapper);
     }
     protected virtual void Start()
     {
-        bird = GetComponent<Rigidbody2D>();
+        bird = gameObjectWrapper.GetComponent<Rigidbody2D>();
         playerScore = 0;
     }
 
     protected virtual void OnDestroy()
     {
-        PlayerList.players.Remove(gameObject);
+        PlayerList.players.Remove(gameObjectWrapper);
+    }
+
+    protected void InitWrappers()
+    {
+        gameObjectWrapper = new GameObjectWrapper(gameObject);
     }
 
     public virtual int GetPlayerScore()
@@ -41,7 +50,7 @@ public class PlayerManager : MonoBehaviourPun
         bird.Sleep();
 
         // disables player movement so the player can't continue playing after losing
-        gameObject.GetComponent<PlayerMovement>().enabled = false;
+        gameObjectWrapper.GetComponent<PlayerMovement>().enabled = false;
 
         EventManager.OnPlayerDeath?.Invoke();
     }
@@ -62,7 +71,7 @@ public class PlayerManager : MonoBehaviourPun
         playerScore++;
     }
 
-    public bool PlayerIsAlive()
+    public virtual bool PlayerIsAlive()
     {
         if (bird == null)
         {

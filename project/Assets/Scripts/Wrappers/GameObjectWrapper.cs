@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameObjectWrapper
 {
-    private GameObject gameObject;
+    public GameObject gameObject;
 
     public GameObjectWrapper()
     {
@@ -29,5 +29,10 @@ public class GameObjectWrapper
     public virtual T GetComponent<T>()
     {
         return gameObject.GetComponent<T>();
+    }
+
+    public virtual T[] GetComponentsInChildren<T>()
+    {
+        return gameObject.GetComponentsInChildren<T>();
     }
 }

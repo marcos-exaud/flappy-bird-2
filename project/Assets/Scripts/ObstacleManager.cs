@@ -59,7 +59,7 @@ public class ObstacleManager : MonoBehaviourPun
     /// <summary>
     /// Method <c>WakeUp</c> Wakes up the rigidbody of the obstacle to allow physics simulation
     /// </summary>
-    public void WakeUp()
+    public virtual void WakeUp()
     {
         if (obstacle.IsSleeping())
         {

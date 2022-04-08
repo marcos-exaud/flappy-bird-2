@@ -4,5 +4,5 @@ using UnityEngine;
 
 public static class PlayerList
 {
-    public static List<GameObject> players = new List<GameObject>();
+    public static List<GameObjectWrapper> players = new List<GameObjectWrapper>();
 }

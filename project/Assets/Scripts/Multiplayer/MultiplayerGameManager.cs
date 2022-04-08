@@ -139,7 +139,7 @@ public class MultiplayerGameManager : GameManager
         yield return uiManager.GetComponent<MultiplayerUIManager>().Countdown();
 
         // wake up all players and obstacles to properly start the game
-        foreach (GameObject player in PlayerList.players)
+        foreach (GameObjectWrapper player in PlayerList.players)
         {
             player.GetComponent<PlayerManager>().WakeUp();
         }
@@ -153,12 +153,12 @@ public class MultiplayerGameManager : GameManager
 
     private bool AllPlayersReady()
     {
-        List<GameObject> players = PlayerList.players;
+        List<GameObjectWrapper> players = PlayerList.players;
 
         // players cant be ready if there arent any
         if (players.Count == 0) return false;
 
-        foreach (GameObject player in players)
+        foreach (GameObjectWrapper player in players)
         {
             PlayerManagerMultiplayer playerManager = player.GetComponent<PlayerManagerMultiplayer>();
             if (!playerManager.ready) return false;
@@ -195,10 +195,10 @@ public class MultiplayerGameManager : GameManager
 
     public static void DestroyAllPlayerGameObjects()
     {
-        List<GameObject> players = PlayerList.players;
-        foreach (GameObject player in players)
+        List<GameObjectWrapper> players = PlayerList.players;
+        foreach (GameObjectWrapper player in players)
         {
-            player.GetPhotonView().RPC("DestroyPlayerGameObject", RpcTarget.All);
+            player.gameObject.GetPhotonView().RPC("DestroyPlayerGameObject", RpcTarget.All);
         }
     }
 
