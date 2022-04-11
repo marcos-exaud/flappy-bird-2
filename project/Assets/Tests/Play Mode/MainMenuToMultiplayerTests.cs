@@ -91,5 +91,6 @@ public class MainMenuToMultiplayerTests
 
         yield return new WaitForSeconds(DELAY_BETWEEN_SCENES);
         Assert.AreEqual(Consts.MULTIPLAYER_GAME_SCENE_1P, SceneManager.GetActiveScene().buildIndex);
+        PhotonNetwork.Disconnect();
     }
 }
