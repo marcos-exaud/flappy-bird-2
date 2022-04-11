@@ -37,7 +37,6 @@ public class UIManager : MonoBehaviour
     protected virtual void Start()
     {
         InitWrappers();
-        Debug.Log(gameOverUIWrapper.gameObject);
     }
 
     protected virtual void OnEnable()
