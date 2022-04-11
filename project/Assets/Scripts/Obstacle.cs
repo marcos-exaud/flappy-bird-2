@@ -11,7 +11,12 @@ public class Obstacle : MonoBehaviour
         // if the other collider is a player, kill it
         if (intruder.layer == LayerMask.NameToLayer("Player"))
         {
-            intruder.GetComponent<PlayerManager>().Kill();
+            GetPlayerManagerWrapperFromGameObject(intruder).Kill();
         }
+    }
+
+    protected virtual PlayerManagerWrapper GetPlayerManagerWrapperFromGameObject(GameObject gameObject)
+    {
+        return new PlayerManagerWrapper(gameObject.GetComponent<PlayerManager>());
     }
 }

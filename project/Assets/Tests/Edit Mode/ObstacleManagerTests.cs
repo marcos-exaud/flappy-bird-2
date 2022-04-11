@@ -67,8 +67,8 @@ public class ObstacleManagerTests
         repositionCheckpointWrapper.When(x => x.SetLastObstacleHeight(Arg.Any<float>())).DoNotCallBase();
 
         MethodInfo getRepositionCheckpointWrapperFromGameObjectMethodInfo = ReflectionUtils.GetMethod(manager, "GetRepositionCheckpointWrapperFromGameObject");
-        getRepositionCheckpointWrapperFromGameObjectMethodInfo.Invoke(manager, new object[] {repositionCheckpointGO}).Returns(repositionCheckpointWrapper);
-        manager.When(x => getRepositionCheckpointWrapperFromGameObjectMethodInfo.Invoke(x, new object[] {repositionCheckpointGO})).DoNotCallBase();
+        getRepositionCheckpointWrapperFromGameObjectMethodInfo.Invoke(manager, new object[] { repositionCheckpointGO }).Returns(repositionCheckpointWrapper);
+        manager.When(x => getRepositionCheckpointWrapperFromGameObjectMethodInfo.Invoke(x, new object[] { repositionCheckpointGO })).DoNotCallBase();
 
         //Act
         ReflectionUtils.Invoke(manager, "OnTriggerEnter2D", new object[] { collider });
