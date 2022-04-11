@@ -20,14 +20,19 @@ public class PlayerMovement : MonoBehaviourPun
     // player rigidbody
     private Rigidbody2D bird;
 
+    // Wrappers
+    protected InputWrapper inputWrapper;
+
     void Start()
     {
         bird = GetComponent<Rigidbody2D>();
+
+        InitWrappers();
     }
 
     protected virtual void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (inputWrapper.GetKeyDown(KeyCode.UpArrow))
         {
             // applies upwards force on the rigidbody
             Fly();
@@ -35,6 +40,11 @@ public class PlayerMovement : MonoBehaviourPun
 
         // Enforces the speed limits on the rigidbody
         LimitSpeed(bird.velocity);
+    }
+
+    protected virtual void InitWrappers()
+    {
+        if (inputWrapper == null) inputWrapper = new InputWrapper();
     }
 
     protected void Fly()
