@@ -8,9 +8,15 @@ public class ObstacleManager : MonoBehaviourPun
     // obstacle rigidbody
     protected Rigidbody2D obstacle;
 
+    // Wrappers
+    protected ToolsWrapper tools;
+    protected Rigidbody2DWrapper obstacleWrapper;
+
     void Start()
     {
         obstacle = GetComponent<Rigidbody2D>();
+
+        InitWrappers();
     }
 
     protected virtual void OnEnable()
@@ -39,9 +45,9 @@ public class ObstacleManager : MonoBehaviourPun
         }
         else if (intruder.layer == LayerMask.NameToLayer("Reposition Checkpoint")) // change the obstacle's height
         {
-            RepositionCheckpoint repositionCheckpoint = intruder.GetComponent<RepositionCheckpoint>();
+            RepositionCheckpointWrapper repositionCheckpoint = GetRepositionCheckpointWrapperFromGameObject(intruder);
 
-            float newHeight = Tools.LimitedRandomVariance(repositionCheckpoint.GetLastObstacleHeight(),
+            float newHeight = tools.LimitedRandomVariance(repositionCheckpoint.GetLastObstacleHeight(),
                                                             Consts.MIN_GAP_HEIGHT,
                                                             Consts.MAX_GAP_HEIGHT,
                                                             Consts.MAX_ABS_VARIANCE);
@@ -56,34 +62,45 @@ public class ObstacleManager : MonoBehaviourPun
         }
     }
 
+    private void InitWrappers()
+    {
+        if (tools == null) tools = new ToolsWrapper();
+        obstacleWrapper = new Rigidbody2DWrapper(obstacle);
+    }
+
     /// <summary>
     /// Method <c>WakeUp</c> Wakes up the rigidbody of the obstacle to allow physics simulation
     /// </summary>
     public virtual void WakeUp()
     {
-        if (obstacle.IsSleeping())
+        if (obstacleWrapper.IsSleeping())
         {
-            obstacle.WakeUp();
+            obstacleWrapper.WakeUp();
 
             // sets the obstacles velocity so it starts moving, allowing the player to clear it
-            obstacle.velocity = new Vector2(-Consts.GAME_X_SCROLLING_SPEED, 0);
+            obstacleWrapper.velocity = new Vector2(-Consts.GAME_X_SCROLLING_SPEED, 0);
         }
     }
 
     public void Sleep()
     {
-        obstacle.Sleep();
+        obstacleWrapper.Sleep();
     }
 
     // cycles the obstacle to the other side of game, effectively respawning it
-    public void Cycle()
+    public virtual void Cycle()
     {
-        obstacle.position = new Vector2(14f, obstacle.position.y);
+        obstacleWrapper.position = new Vector2(14f, obstacleWrapper.position.y);
     }
 
     // repositions the obstacle in the y axis
     public virtual void RepositionY(float value)
     {
-        obstacle.position = new Vector2(obstacle.position.x, value);
+        obstacleWrapper.position = new Vector2(obstacleWrapper.position.x, value);
+    }
+
+    protected virtual RepositionCheckpointWrapper GetRepositionCheckpointWrapperFromGameObject(GameObject collider)
+    {
+        return new RepositionCheckpointWrapper(collider.GetComponent<RepositionCheckpoint>());
     }
 }

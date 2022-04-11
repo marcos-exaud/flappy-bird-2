@@ -50,7 +50,7 @@ public class MultiplayerObstacleManager : ObstacleManager
         {
             RepositionCheckpoint repositionCheckpoint = intruder.GetComponent<RepositionCheckpoint>();
 
-            float newHeight = Tools.LimitedRandomVariance(repositionCheckpoint.GetLastObstacleHeight(),
+            float newHeight = tools.LimitedRandomVariance(repositionCheckpoint.GetLastObstacleHeight(),
                                                             Consts.MIN_GAP_HEIGHT,
                                                             Consts.MAX_GAP_HEIGHT,
                                                             Consts.MAX_ABS_VARIANCE);
