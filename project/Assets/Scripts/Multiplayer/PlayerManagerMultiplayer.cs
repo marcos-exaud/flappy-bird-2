@@ -16,7 +16,7 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
 
     protected override void Awake()
     {
-        InitWrappers();
+        InitWrappersAwake();
         
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
         if (photonView.IsMine)

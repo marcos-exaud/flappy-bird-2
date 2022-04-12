@@ -12,11 +12,13 @@ public class PlayerManager : MonoBehaviourPun
 
     protected int playerScore;
 
+    // Wrappers
     protected GameObjectWrapper gameObjectWrapper;
+    protected Rigidbody2DWrapper birdWrapper;
 
     protected virtual void Awake()
     {
-        InitWrappers();
+        InitWrappersAwake();
 
         PlayerList.players.Add(gameObjectWrapper);
     }
@@ -24,6 +26,8 @@ public class PlayerManager : MonoBehaviourPun
     {
         bird = gameObjectWrapper.GetComponent<Rigidbody2D>();
         playerScore = 0;
+
+        InitWrappersStart();
     }
 
     protected virtual void OnDestroy()
@@ -31,9 +35,14 @@ public class PlayerManager : MonoBehaviourPun
         PlayerList.players.Remove(gameObjectWrapper);
     }
 
-    protected void InitWrappers()
+    protected void InitWrappersAwake()
     {
         gameObjectWrapper = new GameObjectWrapper(gameObject);
+    }
+
+    protected void InitWrappersStart()
+    {
+        birdWrapper = new Rigidbody2DWrapper(bird);
     }
 
     public virtual int GetPlayerScore()
@@ -47,7 +56,7 @@ public class PlayerManager : MonoBehaviourPun
     public virtual void Kill()
     {
         // sleeps the rigidbody of the player to disable physics simulation
-        bird.Sleep();
+        birdWrapper.Sleep();
 
         // disables player movement so the player can't continue playing after losing
         gameObjectWrapper.GetComponent<PlayerMovement>().enabled = false;
@@ -60,9 +69,9 @@ public class PlayerManager : MonoBehaviourPun
     /// </summary>
     public void WakeUp()
     {
-        if (bird.IsSleeping())
+        if (birdWrapper.IsSleeping())
         {
-            bird.WakeUp();
+            birdWrapper.WakeUp();
         }
     }
 
@@ -73,10 +82,10 @@ public class PlayerManager : MonoBehaviourPun
 
     public virtual bool PlayerIsAlive()
     {
-        if (bird == null)
+        if (birdWrapper == null)
         {
             return false;
         }
-        return bird.IsAwake();
+        return birdWrapper.IsAwake();
     }
 }

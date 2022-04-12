@@ -28,6 +28,11 @@ public class Rigidbody2DWrapper
         set { rigidbody2D.position = value; }
     }
 
+    public virtual bool IsAwake()
+    {
+        return rigidbody2D.IsAwake();
+    }
+
     public virtual bool IsSleeping()
     {
         return rigidbody2D.IsSleeping();
