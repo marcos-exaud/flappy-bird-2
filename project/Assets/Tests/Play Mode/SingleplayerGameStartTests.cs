@@ -39,8 +39,6 @@ public class SingleplayerGameStartTests
     [UnityTest]
     public IEnumerator _1_instantiating_player()
     {
-        // Arrange
-
         // Act
         yield return new WaitForSeconds(DELAY_FOR_GAMEMANAGER_START);
         player = GameObject.Find("Player(Clone)");

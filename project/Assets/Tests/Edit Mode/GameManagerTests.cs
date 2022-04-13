@@ -20,7 +20,6 @@ public class GameManagerTests
         //Variable Reflexion attribution
         ReflectionUtils.SetValue(manager, "uiManagerWrapper", uiManager);
         ReflectionUtils.SetValue(manager, "inputWrapper", inputWrapper);
-        //ReflectionUtils.SetValue(manager, "punWrapper", pun);
     }
 
     public void InitComponents()
@@ -31,7 +30,6 @@ public class GameManagerTests
         // Substitutes
         uiManager = Substitute.For<GameObjectWrapper>();
         inputWrapper = Substitute.For<InputWrapper>();
-        //pun = Substitute.For<PhotonNetworkWrapper>();
     }
 
     [Test]
