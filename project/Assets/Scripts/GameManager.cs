@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     protected virtual void InitWrappers()
     {
-        if (inputWrapper == null) inputWrapper = new InputWrapper();
+        if (inputWrapper == null) { inputWrapper = new InputWrapper(); }
         uiManagerWrapper = new GameObjectWrapper(uiManager);
     }
 

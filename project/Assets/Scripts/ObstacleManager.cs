@@ -51,7 +51,7 @@ public class ObstacleManager : MonoBehaviourPun
                                                             Consts.MIN_GAP_HEIGHT,
                                                             Consts.MAX_GAP_HEIGHT,
                                                             Consts.MAX_ABS_VARIANCE);
-                                                            
+
             RepositionY(newHeight);
 
             repositionCheckpoint.SetLastObstacleHeight(newHeight);
@@ -64,7 +64,7 @@ public class ObstacleManager : MonoBehaviourPun
 
     private void InitWrappers()
     {
-        if (tools == null) tools = new ToolsWrapper();
+        if (tools == null) { tools = new ToolsWrapper(); }
         obstacleWrapper = new Rigidbody2DWrapper(obstacle);
     }
 
