@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour
         progressLabelWrapper = new GameObjectWrapper(progressLabel);
     }
 
-    public void UpdateScoreboard(GameObjectWrapper player)
+    public virtual void UpdateScoreboard(GameObjectWrapper player)
     {
         PlayerManager playerManager = player.GetComponent<PlayerManager>();
         int clearerScore = playerManager.GetPlayerScore();

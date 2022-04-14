@@ -16,6 +16,8 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
 
     protected override void Awake()
     {
+        InitWrappersAwake();
+        
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instantiation when levels are synchronized
         if (photonView.IsMine)
         {
@@ -25,15 +27,15 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(gameObject);
 
-        if (!PlayerList.players.Contains(gameObject))
+        if (!PlayerList.players.Contains(gameObjectWrapper))
         {
-            PlayerList.players.Add(gameObject);
+            PlayerList.players.Add(gameObjectWrapper);
         }
     }
 
     protected override void Start()
     {
-        SpriteRenderer[] playerSprites = GetComponentsInChildren<SpriteRenderer>();
+        SpriteRenderer[] playerSprites = gameObjectWrapper.GetComponentsInChildren<SpriteRenderer>();
         playerSprites[0].enabled = photonView.IsMine;
         playerSprites[1].enabled = !photonView.IsMine;
 
@@ -87,14 +89,14 @@ public class PlayerManagerMultiplayer : PlayerManager, IPunObservable
         {
             // We own this player: send the others our data
             stream.SendNext(PlayerIsAlive());
-            stream.SendNext(gameObject.GetComponent<PlayerMovement>().enabled);
+            stream.SendNext(gameObjectWrapper.GetComponent<PlayerMovement>().enabled);
         }
         else
         {
             // Network player, receive data
             bool playerIsAlive = (bool)stream.ReceiveNext();
             if (!playerIsAlive && PlayerIsAlive()) FallAsleep();
-            gameObject.GetComponent<PlayerMovement>().enabled = (bool)stream.ReceiveNext();
+            gameObjectWrapper.GetComponent<PlayerMovement>().enabled = (bool)stream.ReceiveNext();
         }
     }
 
