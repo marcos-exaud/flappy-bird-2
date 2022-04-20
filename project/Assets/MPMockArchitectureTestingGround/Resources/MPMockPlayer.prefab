@@ -12,11 +12,12 @@ GameObject:
   - component: {fileID: 2172775439572111381}
   - component: {fileID: -5424090491756820138}
   - component: {fileID: -8136246284745688959}
-  - component: {fileID: -2817037990524026789}
+  - component: {fileID: 4704158370796695851}
+  - component: {fileID: 7040593907122098797}
   - component: {fileID: -6325450804942233280}
   - component: {fileID: 5536434366300283116}
   m_Layer: 0
-  m_Name: Player
+  m_Name: MPMockPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +135,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-2817037990524026789
+--- !u!114 &4704158370796695851
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +144,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 6382675857652392555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb3573feda234d9888f5c041f9dc19b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f2a088d431784455a7ec0bfa5a64374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 0}
+--- !u!114 &7040593907122098797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382675857652392555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f916bd496a64199bc4e0e1122300b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-6325450804942233280
 MonoBehaviour:
   m_ObjectHideFlags: 0

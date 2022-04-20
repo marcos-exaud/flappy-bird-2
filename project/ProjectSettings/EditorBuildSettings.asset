@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LoadLevelIfSyncedWorkaroundScene.unity
     guid: 8fe001beb2faf41eabc9a0f25e23daca
+  - enabled: 1
+    path: Assets/MPMockArchitectureTestingGround/MPMock1.unity
+    guid: c3510176849c84882a41be4e205aa37e
+  - enabled: 1
+    path: Assets/MPMockArchitectureTestingGround/MPMock2.unity
+    guid: 166649482801b4f67a7d0921bb2b21a8
   m_configObjects: {}

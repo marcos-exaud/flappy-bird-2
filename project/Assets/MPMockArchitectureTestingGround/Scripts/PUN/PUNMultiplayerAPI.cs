@@ -3,32 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
 {
     private Dictionary<Photon.Realtime.Player, Player> playerDictionary;
 
     #region MultiplayerAPI Implementation
-    public void Connect()
+    void MultiplayerAPI.Start()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+    void MultiplayerAPI.Connect()
     {
         if (!PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.GameVersion = PUNSettings.gameVersion;
         }
     }
 
-    public void Disconnect()
+    void MultiplayerAPI.Disconnect()
     {
         if (PhotonNetwork.IsConnected)
         {
-            LeaveRoom();
+            ((MultiplayerAPI)this).LeaveRoom();
             PhotonNetwork.Disconnect();
         }
     }
 
-    public void JoinRoom()
+    void MultiplayerAPI.JoinRoom()
     {
         if (!PhotonNetwork.InRoom)
         {
@@ -36,7 +41,7 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
         }
     }
 
-    public void LeaveRoom()
+    void MultiplayerAPI.LeaveRoom()
     {
         if (PhotonNetwork.InRoom)
         {
@@ -44,7 +49,7 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
         }
     }
 
-    public Player InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
+    Player MultiplayerAPI.InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
     {
         if (playerPrefab != null && position != null)
         {
@@ -56,6 +61,18 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
     #endregion
 
     #region PUN Callbacks
+    public override void OnJoinedRoom()
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        {
+            PhotonNetwork.LoadLevel(5);
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        PhotonNetwork.LoadLevel(4);
+    }
     #endregion
 
     /*

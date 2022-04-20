@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface MultiplayerAPI
 {
+    public void Start();
+    
     public void Connect();
 
     public void Disconnect();

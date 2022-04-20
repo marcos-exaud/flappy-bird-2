@@ -34,4 +34,9 @@ public class GameManager : MonoBehaviour
 
         // Start the game
     }
+
+    public void Disconnect()
+    {
+        mpAPI.Disconnect();
+    }
 }
