@@ -11,6 +11,5 @@ public interface IPlayerManager
     public void SetLocalPlayer(Player player);
     #endregion
 
-    public void RegisterPlayer(Player newPlayer);
     public bool AllPlayersReady();
 }

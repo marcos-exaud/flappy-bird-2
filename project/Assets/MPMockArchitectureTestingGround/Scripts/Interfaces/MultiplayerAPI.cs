@@ -15,4 +15,8 @@ public interface MultiplayerAPI
     public void LeaveRoom();
 
     public Player InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position);
+
+    public void RegisterPlayerOnNetwork(Player player);
+
+    public void UnregisterPlayerOnNetwork(Player player);
 }

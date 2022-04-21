@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Player localPlayer;
+    private Rigidbody2D rb;
     void Start()
     {
-        
+        localPlayer = GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer;
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        if (gameObject.GetComponent<Player>() == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rb.AddForce(new Vector2(0, 3), ForceMode2D.Impulse);
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                rb.AddForce(new Vector2(-2, 0), ForceMode2D.Impulse);
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                rb.AddForce(new Vector2(2, 0), ForceMode2D.Impulse);
+            }
+        }
     }
 }

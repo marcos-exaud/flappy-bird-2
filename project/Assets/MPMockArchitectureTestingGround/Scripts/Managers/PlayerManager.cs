@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, IPlayerManager
@@ -19,6 +20,24 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
         localPlayer = null;
         playerList = new List<Player>();
     }
+
+    void OnEnable()
+    {
+        Player.onPlayerStart += RegisterPlayer;
+        Player.onPlayerDestroy += UnregisterPlayer;
+    }
+
+    void OnDisable()
+    {
+        Player.onPlayerStart -= RegisterPlayer;
+        Player.onPlayerDestroy -= UnregisterPlayer;
+    }
+
+    void OnDestroy()
+    {
+        Player.onPlayerStart -= RegisterPlayer;
+        Player.onPlayerDestroy -= UnregisterPlayer;
+    }
     #endregion
 
     #region Getters and Setters
@@ -33,11 +52,19 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
     }
     #endregion
 
-    void IPlayerManager.RegisterPlayer(Player newPlayer)
+    private void RegisterPlayer(Player newPlayer)
     {
         if (!playerList.Contains(newPlayer))
         {
             playerList.Add(newPlayer);
+        }
+    }
+
+    private void UnregisterPlayer(Player newPlayer)
+    {
+        if (playerList.Contains(newPlayer))
+        {
+            playerList.Remove(newPlayer);
         }
     }
 

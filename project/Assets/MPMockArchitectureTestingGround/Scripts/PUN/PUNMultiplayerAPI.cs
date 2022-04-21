@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using ExitGames.Client.Photon;
 
 public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
 {
@@ -37,7 +38,7 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
     {
         if (!PhotonNetwork.InRoom)
         {
-            PhotonNetwork.JoinRandomOrCreateRoom(expectedMaxPlayers: PUNSettings.maxPlayersPerRoom);
+            PhotonNetwork.JoinRandomRoom();
         }
     }
 
@@ -58,27 +59,47 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
         }
         return null;
     }
+
+    void MultiplayerAPI.RegisterPlayerOnNetwork(Player player)
+    {
+        PhotonView playerPhotonView = player.gameObject.GetPhotonView();
+        Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
+
+        if (playerDictionary.ContainsKey(punPlayer))
+        {
+            playerDictionary[punPlayer] = player;
+        }
+        else
+        {
+            playerDictionary.Add(punPlayer, player);
+        }
+    }
+
+    void MultiplayerAPI.UnregisterPlayerOnNetwork(Player player)
+    {
+        PhotonView playerPhotonView = player.gameObject.GetPhotonView();
+        Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
+        
+        playerDictionary.Remove(punPlayer);
+    }
     #endregion
 
     #region PUN Callbacks
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = PUNSettings.maxPlayersPerRoom });
+    }
     public override void OnJoinedRoom()
     {
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
-            PhotonNetwork.LoadLevel(5);
+            PhotonNetwork.LoadLevel(1);
         }
     }
 
     public override void OnLeftRoom()
     {
-        PhotonNetwork.LoadLevel(4);
+        PhotonNetwork.LoadLevel(0);
     }
     #endregion
-
-    /*
-    private void JoinRoom(ExitGames.Client.Photon.Hashtable expectedCustomRoomProperties = null, byte expectedMaxPlayers = PUNSettings.maxPlayersPerRoom, string roomName = null, RoomOptions roomOptions = null)
-    {
-        PhotonNetwork.JoinRandomOrCreateRoom(expectedCustomRoomProperties: expectedCustomRoomProperties, expectedMaxPlayers: expectedMaxPlayers, roomName: roomName, roomOptions: roomOptions);
-    }
-    */
 }

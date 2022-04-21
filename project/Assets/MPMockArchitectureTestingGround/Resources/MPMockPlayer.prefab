@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7040593907122098797}
   - component: {fileID: -6325450804942233280}
   - component: {fileID: 5536434366300283116}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MPMockPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
