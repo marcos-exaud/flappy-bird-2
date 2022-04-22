@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Reflection;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -8,9 +10,38 @@ using ExitGames.Client.Photon;
 
 public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
 {
-    private Dictionary<Photon.Realtime.Player, Player> playerDictionary;
+    private Dictionary<Photon.Realtime.Player, Player> playerDictionary = new Dictionary<Photon.Realtime.Player, Player>();
+
+    private event MultiplayerAPI.MultiplayerRoomAction onJoinedRoom;
+    private event MultiplayerAPI.MultiplayerRoomAction onJoinRoomFailed;
 
     #region MultiplayerAPI Implementation
+    event MultiplayerAPI.MultiplayerRoomAction MultiplayerAPI.onJoinedRoom
+    {
+        add
+        {
+            onJoinedRoom += value;
+        }
+
+        remove
+        {
+            onJoinedRoom -= value;
+        }
+    }
+
+    event MultiplayerAPI.MultiplayerRoomAction MultiplayerAPI.onJoinRoomFailed
+    {
+        add
+        {
+            onJoinRoomFailed += value;
+        }
+
+        remove
+        {
+            onJoinRoomFailed -= value;
+        }
+    }
+
     void MultiplayerAPI.Start()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -18,49 +49,57 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
 
     void MultiplayerAPI.Connect()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.ConnectUsingSettings();
-            PhotonNetwork.GameVersion = PUNSettings.gameVersion;
-        }
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = PUNSettings.gameVersion;
     }
 
     void MultiplayerAPI.Disconnect()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            ((MultiplayerAPI)this).LeaveRoom();
-            PhotonNetwork.Disconnect();
-        }
+        PhotonNetwork.Disconnect();
+    }
+
+    bool MultiplayerAPI.IsConnected()
+    {
+        return PhotonNetwork.IsConnected;
     }
 
     void MultiplayerAPI.JoinRoom()
     {
-        if (!PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.JoinRandomRoom();
-        }
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    void MultiplayerAPI.CreateRoom()
+    {
+        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = PUNSettings.maxPlayersPerRoom });
     }
 
     void MultiplayerAPI.LeaveRoom()
     {
-        if (PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
+        PhotonNetwork.LeaveRoom();
+    }
+
+    bool MultiplayerAPI.IsInRoom()
+    {
+        return PhotonNetwork.InRoom;
+    }
+
+    void MultiplayerAPI.LoadScene(int sceneIndex)
+    {
+        PhotonNetwork.LoadLevel(sceneIndex);
+    }
+
+    int MultiplayerAPI.PlayerCount()
+    {
+        return PhotonNetwork.CurrentRoom.PlayerCount;
     }
 
     Player MultiplayerAPI.InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
     {
-        if (playerPrefab != null && position != null)
-        {
-            GameObject playerGO = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity);
-            return playerGO.GetComponent<Player>();
-        }
-        return null;
+        GameObject playerGO = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity);
+        return playerGO.GetComponent<Player>();
     }
 
-    void MultiplayerAPI.RegisterPlayerOnNetwork(Player player)
+    /*void MultiplayerAPI.RegisterPlayerOnNetwork(Player player)
     {
         PhotonView playerPhotonView = player.gameObject.GetPhotonView();
         Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
@@ -79,24 +118,22 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
     {
         PhotonView playerPhotonView = player.gameObject.GetPhotonView();
         Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
-        
+
         playerDictionary.Remove(punPlayer);
-    }
+    }*/
     #endregion
 
     #region PUN Callbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = PUNSettings.maxPlayersPerRoom });
+        onJoinRoomFailed?.Invoke();
     }
     public override void OnJoinedRoom()
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            PhotonNetwork.LoadLevel(1);
-        }
+        onJoinedRoom?.Invoke();
     }
 
+    // temporarily here for testing purposes
     public override void OnLeftRoom()
     {
         PhotonNetwork.LoadLevel(0);

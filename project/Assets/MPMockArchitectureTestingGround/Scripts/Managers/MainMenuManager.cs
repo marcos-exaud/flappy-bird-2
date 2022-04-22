@@ -17,15 +17,52 @@ public class MainMenuManager : MonoBehaviour
     {
         mpAPI.Start();
     }
+
+    void OnEnable()
+    {
+        mpAPI.onJoinRoomFailed += CreateRoom;
+        mpAPI.onJoinedRoom += LoadGameScene;
+    }
+
+    void OnDisable()
+    {
+        mpAPI.onJoinRoomFailed -= CreateRoom;
+        mpAPI.onJoinedRoom -= LoadGameScene;
+    }
+
+    void OnDestroy()
+    {
+        mpAPI.onJoinRoomFailed -= CreateRoom;
+        mpAPI.onJoinedRoom -= LoadGameScene;
+    }
     #endregion
 
     public void Connect()
     {
-        mpAPI.Connect();
+        if (!mpAPI.IsConnected()) { mpAPI.Connect(); }
     }
 
     public void JoinRoom()
     {
-        mpAPI.JoinRoom();
+        if (mpAPI.IsConnected() && !mpAPI.IsInRoom())
+        {
+            mpAPI.JoinRoom();
+        }
+    }
+
+    private void CreateRoom()
+    {
+        if (mpAPI.IsConnected() && !mpAPI.IsInRoom())
+        {
+            mpAPI.CreateRoom();
+        }
+    }
+
+    private void LoadGameScene()
+    {
+        if (mpAPI.IsConnected() && mpAPI.IsInRoom() && mpAPI.PlayerCount() == 1)
+        {
+            mpAPI.LoadScene(1);
+        }
     }
 }

@@ -24,18 +24,21 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
     void OnEnable()
     {
         Player.onPlayerStart += RegisterPlayer;
+        Player.onPlayerStart += HandleNetworkPlayer;
         Player.onPlayerDestroy += UnregisterPlayer;
     }
 
     void OnDisable()
     {
         Player.onPlayerStart -= RegisterPlayer;
+        Player.onPlayerStart -= HandleNetworkPlayer;
         Player.onPlayerDestroy -= UnregisterPlayer;
     }
 
     void OnDestroy()
     {
         Player.onPlayerStart -= RegisterPlayer;
+        Player.onPlayerStart -= HandleNetworkPlayer;
         Player.onPlayerDestroy -= UnregisterPlayer;
     }
     #endregion
@@ -68,8 +71,21 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
         }
     }
 
+    private void HandleNetworkPlayer(Player player)
+    {
+        if (player != localPlayer)
+        {
+            player.ChangeSprite();
+            player.TogglePhysics();
+        }
+    }
+
     bool IPlayerManager.AllPlayersReady()
     {
-        return !playerList.Any(player => player.GetReady() == false);
+        if (playerList.Any())
+        {
+            return !playerList.Any(player => player.GetReady() == false);
+        }
+        return false;
     }
 }

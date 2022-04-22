@@ -22,12 +22,13 @@ public class GameManager : MonoBehaviour
         playerManager = gameObject.GetComponent<IPlayerManager>();
         if (playerManager.localPlayer == null)
         {
-            Player player = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
-            playerManager.SetLocalPlayer(player);
+            InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
         }
+
+        StartCoroutine(StartGame());
     }
 
-    void OnEnable()
+    /*void OnEnable()
     {
         Player.onPlayerStart += mpAPI.RegisterPlayerOnNetwork;
         Player.onPlayerDestroy += mpAPI.UnregisterPlayerOnNetwork;
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         Player.onPlayerStart -= mpAPI.RegisterPlayerOnNetwork;
         Player.onPlayerDestroy -= mpAPI.UnregisterPlayerOnNetwork;
-    }
+    }*/
     #endregion
 
     private IEnumerator StartGame()
@@ -51,10 +52,27 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => playerManager.AllPlayersReady());
 
         // Start the game
+        Debug.Log("Game Started!");
+    }
+
+    private void InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
+    {
+        if (playerPrefab != null && position != null)
+        {
+            Player player = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
+            playerManager.SetLocalPlayer(player);
+        }
     }
 
     public void Disconnect()
     {
-        mpAPI.Disconnect();
+        if (mpAPI.IsConnected())
+        {
+            if (mpAPI.IsInRoom())
+            {
+                mpAPI.LeaveRoom();
+            }
+            mpAPI.Disconnect();
+        }
     }
 }
