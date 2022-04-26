@@ -10,10 +10,29 @@ using ExitGames.Client.Photon;
 
 public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
 {
-    private Dictionary<Photon.Realtime.Player, Player> playerDictionary = new Dictionary<Photon.Realtime.Player, Player>();
-
     private event MultiplayerAPI.MultiplayerRoomAction onJoinedRoom;
     private event MultiplayerAPI.MultiplayerRoomAction onJoinRoomFailed;
+
+    #region MonoBehaviour Methods
+    public override void OnEnable()
+    {
+        base.OnEnable();
+
+        PhotonNetwork.NetworkingClient.EventReceived += OnPhotonEvent;
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+
+    void OnDestroy()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnPhotonEvent;
+    }
+    #endregion
 
     #region MultiplayerAPI Implementation
     event MultiplayerAPI.MultiplayerRoomAction MultiplayerAPI.onJoinedRoom
@@ -93,34 +112,27 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
         return PhotonNetwork.CurrentRoom.PlayerCount;
     }
 
-    Player MultiplayerAPI.InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
+    GameObject MultiplayerAPI.InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position)
     {
         GameObject playerGO = PhotonNetwork.Instantiate(playerPrefab.name, position, Quaternion.identity);
-        return playerGO.GetComponent<Player>();
+        return playerGO;
     }
 
-    /*void MultiplayerAPI.RegisterPlayerOnNetwork(Player player)
+    int MultiplayerAPI.GetNetworkIDByGameObject(GameObject go)
     {
-        PhotonView playerPhotonView = player.gameObject.GetPhotonView();
-        Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
-
-        if (playerDictionary.ContainsKey(punPlayer))
-        {
-            playerDictionary[punPlayer] = player;
-        }
-        else
-        {
-            playerDictionary.Add(punPlayer, player);
-        }
+        return go.GetPhotonView().ViewID;
     }
 
-    void MultiplayerAPI.UnregisterPlayerOnNetwork(Player player)
+    GameObject MultiplayerAPI.GetGameObjectByNetworkID(int netID)
     {
-        PhotonView playerPhotonView = player.gameObject.GetPhotonView();
-        Photon.Realtime.Player punPlayer = playerPhotonView.Owner;
+        return PhotonNetwork.GetPhotonView(netID).gameObject;
+    }
 
-        playerDictionary.Remove(punPlayer);
-    }*/
+    void MultiplayerAPI.CommunicatePlayerReadyUpToServer(object[] data)
+    {
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent((byte)NetworkEventHandler.NetworkEventCodes.onRemotePlayerReadyUp, data, raiseEventOptions, SendOptions.SendReliable);
+    }
     #endregion
 
     #region PUN Callbacks
@@ -137,6 +149,13 @@ public class PUNMultiplayerAPI : MonoBehaviourPunCallbacks, MultiplayerAPI
     public override void OnLeftRoom()
     {
         PhotonNetwork.LoadLevel(0);
+    }
+    #endregion
+
+    #region Custom Callbacks
+    private void OnPhotonEvent(EventData photonEvent)
+    {
+        NetworkEventHandler.ProcessEvent(photonEvent.Code, (object[])photonEvent.CustomData);
     }
     #endregion
 }

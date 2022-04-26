@@ -8,12 +8,12 @@ public class Player : MonoBehaviour
 {
     // Delegates
     public delegate void PlayerInstanceAction(Player player);
-    public delegate void PlayerPropertyAction(Player player, string property);
+    public delegate void LocalPlayerInstanceAction(Player player);
 
     // Events
     public static event PlayerInstanceAction onPlayerStart;
     public static event PlayerInstanceAction onPlayerDestroy;
-    public static event PlayerInstanceAction onPlayerPropertyUpdate;
+    public static event LocalPlayerInstanceAction onLocalPlayerReadyUp;
 
     // Properties
     private bool ready = false;
@@ -27,16 +27,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         onPlayerStart?.Invoke(this);
-    }
 
-    void Update()
-    {
         if (this == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                ready = true;
-            }
+            StartCoroutine(WaitForReadyUp());
         }
     }
 
@@ -51,7 +45,20 @@ public class Player : MonoBehaviour
     {
         return ready;
     }
+
+    public void SetReady(bool value)
+    {
+        ready = value;
+    }
     #endregion
+
+    private IEnumerator WaitForReadyUp()
+    {
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.DownArrow));
+
+        onLocalPlayerReadyUp?.Invoke(this);
+        ready = true;
+    }
 
     public void ChangeSprite()
     {

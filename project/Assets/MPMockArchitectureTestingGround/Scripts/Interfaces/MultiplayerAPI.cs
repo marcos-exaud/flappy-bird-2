@@ -22,8 +22,11 @@ public interface MultiplayerAPI
 
     public int PlayerCount();
 
-    public Player InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position);
+    public GameObject InstantiateLocalPlayer(GameObject playerPrefab, Vector2 position);
 
-    /*public void RegisterPlayerOnNetwork(Player player);
-    public void UnregisterPlayerOnNetwork(Player player);*/
+    public int GetNetworkIDByGameObject(GameObject go);
+
+    public GameObject GetGameObjectByNetworkID(int netID);
+
+    public void CommunicatePlayerReadyUpToServer(object[] data);
 }

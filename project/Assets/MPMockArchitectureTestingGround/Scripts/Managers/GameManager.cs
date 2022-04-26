@@ -28,23 +28,21 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartGame());
     }
 
-    /*void OnEnable()
+    void OnEnable()
     {
-        Player.onPlayerStart += mpAPI.RegisterPlayerOnNetwork;
-        Player.onPlayerDestroy += mpAPI.UnregisterPlayerOnNetwork;
+        Player.onLocalPlayerReadyUp += CommunicatePlayerReadyUpToServer;
+        NetworkEventHandler.onRemotePlayerReadyUp += UpdateRemotePlayerReadyState;
     }
 
     void OnDisable()
     {
-        Player.onPlayerStart -= mpAPI.RegisterPlayerOnNetwork;
-        Player.onPlayerDestroy -= mpAPI.UnregisterPlayerOnNetwork;
+        Player.onLocalPlayerReadyUp -= CommunicatePlayerReadyUpToServer;
     }
 
     void OnDestroy()
     {
-        Player.onPlayerStart -= mpAPI.RegisterPlayerOnNetwork;
-        Player.onPlayerDestroy -= mpAPI.UnregisterPlayerOnNetwork;
-    }*/
+        Player.onLocalPlayerReadyUp -= CommunicatePlayerReadyUpToServer;
+    }
     #endregion
 
     private IEnumerator StartGame()
@@ -59,8 +57,30 @@ public class GameManager : MonoBehaviour
     {
         if (playerPrefab != null && position != null)
         {
-            Player player = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
+            GameObject playerGO = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
+            Player player = playerGO.GetComponent<Player>();
             playerManager.SetLocalPlayer(player);
+        }
+    }
+
+    private void CommunicatePlayerReadyUpToServer(Player player)
+    {
+        int playerNetID = mpAPI.GetNetworkIDByGameObject(player.gameObject);
+        mpAPI.CommunicatePlayerReadyUpToServer(new object[] { playerNetID });
+    }
+
+    private void UpdateRemotePlayerReadyState(int playerNetID)
+    {
+        try
+        {
+            GameObject playerGO = mpAPI.GetGameObjectByNetworkID(playerNetID);
+            Player player = playerGO.GetComponent<Player>();
+            player.SetReady(true);
+        }
+        catch (System.Exception)
+        {
+            // The player in question probably left the room during this operation
+            throw;
         }
     }
 
