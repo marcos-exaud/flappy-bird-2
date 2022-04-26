@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Player localPlayer;
+    private IPlayer localPlayer;
     private Rigidbody2D rb;
     void Start()
     {
@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        if (gameObject.GetComponent<Player>() == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
+        if (gameObject.GetComponent<IPlayer>() == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {

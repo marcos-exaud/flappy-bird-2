@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour, IPlayerManager
 {
-    private Player localPlayer { get; set; }
-    Player IPlayerManager.localPlayer { get { return localPlayer; } }
-    private List<Player> playerList;
+    private IPlayer localPlayer { get; set; }
+    IPlayer IPlayerManager.localPlayer { get { return localPlayer; } }
+    private List<IPlayer> playerList;
 
     // Prefabs
     [SerializeField]
@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
     void Awake()
     {
         localPlayer = null;
-        playerList = new List<Player>();
+        playerList = new List<IPlayer>();
     }
 
     void OnEnable()
@@ -49,13 +49,13 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
         return playerPrefab;
     }
 
-    void IPlayerManager.SetLocalPlayer(Player player)
+    void IPlayerManager.SetLocalPlayer(IPlayer player)
     {
         localPlayer = player;
     }
     #endregion
 
-    private void RegisterPlayer(Player newPlayer)
+    private void RegisterPlayer(IPlayer newPlayer)
     {
         if (!playerList.Contains(newPlayer))
         {
@@ -63,7 +63,7 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
         }
     }
 
-    private void UnregisterPlayer(Player newPlayer)
+    private void UnregisterPlayer(IPlayer newPlayer)
     {
         if (playerList.Contains(newPlayer))
         {
@@ -71,7 +71,7 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
         }
     }
 
-    private void HandleRemotePlayer(Player player)
+    private void HandleRemotePlayer(IPlayer player)
     {
         if (player != localPlayer)
         {

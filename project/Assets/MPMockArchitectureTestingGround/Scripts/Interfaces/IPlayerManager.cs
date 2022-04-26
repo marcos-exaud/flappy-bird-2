@@ -4,11 +4,11 @@ using UnityEngine;
 
 public interface IPlayerManager
 {
-    public Player localPlayer { get; }
+    public IPlayer localPlayer { get; }
 
     #region Getters and Setters
     public GameObject GetPlayerPrefab();
-    public void SetLocalPlayer(Player player);
+    public void SetLocalPlayer(IPlayer player);
     #endregion
 
     public bool AllPlayersReady();

@@ -58,12 +58,12 @@ public class GameManager : MonoBehaviour
         if (playerPrefab != null && position != null)
         {
             GameObject playerGO = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
-            Player player = playerGO.GetComponent<Player>();
+            IPlayer player = playerGO.GetComponent<IPlayer>();
             playerManager.SetLocalPlayer(player);
         }
     }
 
-    private void CommunicatePlayerReadyUpToServer(Player player)
+    private void CommunicatePlayerReadyUpToServer(IPlayer player)
     {
         int playerNetID = mpAPI.GetNetworkIDByGameObject(player.gameObject);
         mpAPI.CommunicatePlayerReadyUpToServer(new object[] { playerNetID });
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         try
         {
             GameObject playerGO = mpAPI.GetGameObjectByNetworkID(playerNetID);
-            Player player = playerGO.GetComponent<Player>();
+            IPlayer player = playerGO.GetComponent<IPlayer>();
             player.SetReady(true);
         }
         catch (System.Exception)

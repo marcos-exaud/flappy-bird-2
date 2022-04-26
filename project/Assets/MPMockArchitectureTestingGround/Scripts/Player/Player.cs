@@ -4,11 +4,16 @@ using System.Reflection;
 using System;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayer
 {
+    GameObject IPlayer.gameObject
+    {
+        get { return this.gameObject; }
+    }
+
     // Delegates
-    public delegate void PlayerInstanceAction(Player player);
-    public delegate void LocalPlayerInstanceAction(Player player);
+    public delegate void PlayerInstanceAction(IPlayer player);
+    public delegate void LocalPlayerInstanceAction(IPlayer player);
 
     // Events
     public static event PlayerInstanceAction onPlayerStart;
@@ -41,12 +46,12 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Getters and Setters
-    public bool GetReady()
+    bool IPlayer.GetReady()
     {
         return ready;
     }
 
-    public void SetReady(bool value)
+    void IPlayer.SetReady(bool value)
     {
         ready = value;
     }
@@ -60,12 +65,12 @@ public class Player : MonoBehaviour
         ready = true;
     }
 
-    public void ChangeSprite()
+    void IPlayer.ChangeSprite()
     {
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.8f, 0.2f, 0.2f);
     }
 
-    public void TogglePhysics()
+    void IPlayer.TogglePhysics()
     {
         gameObject.GetComponent<Rigidbody2D>().isKinematic ^= true;
     }
