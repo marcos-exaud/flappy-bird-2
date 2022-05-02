@@ -3013,6 +3013,14 @@ PrefabInstance:
       propertyPath: readyUpCountdown
       value: 
       objectReference: {fileID: 6592753565681852652}
+    - target: {fileID: 5877972502860336038, guid: d5fafbbe1bbfc449ba582040e53da63b, type: 3}
+      propertyPath: rematchUIWrapper.gameObject
+      value: 
+      objectReference: {fileID: 6033788428930925134}
+    - target: {fileID: 5877972502860336038, guid: d5fafbbe1bbfc449ba582040e53da63b, type: 3}
+      propertyPath: gameOverUIWrapper.gameObject
+      value: 
+      objectReference: {fileID: 4399272119639276283}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5fafbbe1bbfc449ba582040e53da63b, type: 3}
 --- !u!4 &6933669767074657492 stripped
@@ -3141,6 +3149,14 @@ PrefabInstance:
       propertyPath: obstacles.Array.data[2]
       value: 
       objectReference: {fileID: 8437733928784593222}
+    - target: {fileID: 2182728123419043016, guid: 7e34a15b7870d465e8015ddb5b7022c4, type: 3}
+      propertyPath: playerPrefab.gameObject
+      value: 
+      objectReference: {fileID: 5288595042010842010, guid: cc6bcc526f2cf4261b12ecf996708665, type: 3}
+    - target: {fileID: 2182728123419043016, guid: 7e34a15b7870d465e8015ddb5b7022c4, type: 3}
+      propertyPath: uiManagerWrapper.gameObject
+      value: 
+      objectReference: {fileID: 8561825673019587239}
     - target: {fileID: 7748597702803665745, guid: 7e34a15b7870d465e8015ddb5b7022c4, type: 3}
       propertyPath: m_Name
       value: Multiplayer Game Manager

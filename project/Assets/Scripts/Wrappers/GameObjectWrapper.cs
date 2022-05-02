@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GameObjectWrapper
 {
+    [SerializeField]
     public GameObject gameObject;
 
-    public GameObjectWrapper()
-    {
-        this.gameObject = new GameObject();
-    }
+    public GameObjectWrapper() { }
 
     public GameObjectWrapper(GameObject gameObject)
     {

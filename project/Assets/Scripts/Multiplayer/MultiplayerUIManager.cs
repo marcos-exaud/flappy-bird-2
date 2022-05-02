@@ -8,7 +8,7 @@ public class MultiplayerUIManager : UIManager
 {
     [Tooltip("The Ui Panel containing the rematch menu")]
     [SerializeField]
-    private GameObject rematchUI;
+    private GameObjectWrapper rematchUIWrapper;
 
     [SerializeField]
     private TextMeshProUGUI readyUpLabel;
@@ -20,10 +20,8 @@ public class MultiplayerUIManager : UIManager
     [SerializeField]
     private string playerReadyLabel = "You are ready! Waiting for other players...";
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
-
         readyUpLabel.SetText(readyUpPrompt);
     }
 
@@ -94,7 +92,7 @@ public class MultiplayerUIManager : UIManager
 
     public void ToggleRematchUI()
     {
-        gameOverUI.SetActive(false);
-        rematchUI.SetActive(true);
+        gameOverUIWrapper.SetActive(false);
+        rematchUIWrapper.SetActive(true);
     }
 }

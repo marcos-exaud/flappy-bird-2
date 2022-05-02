@@ -2840,6 +2840,22 @@ PrefabInstance:
       propertyPath: multiplayerMenuUI
       value: 
       objectReference: {fileID: 1064149024}
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: controlPanelWrapper.gameObject
+      value: 
+      objectReference: {fileID: 993236283}
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: defaultMenuUIWrapper.gameObject
+      value: 
+      objectReference: {fileID: 888760755}
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: progressLabelWrapper.gameObject
+      value: 
+      objectReference: {fileID: 1279813201}
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: multiplayerMenuUIWrapper.gameObject
+      value: 
+      objectReference: {fileID: 1064149024}
     - target: {fileID: 3260382640859724213, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
       propertyPath: m_Name
       value: UI Manager
@@ -2935,7 +2951,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3e204b8edd94ef1a4c25b4cb7eb443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 1998111705}
+  uiManagerWrapper:
+    gameObject: {fileID: 1998111705}
   maxPlayersPerRoom: 4
 --- !u!4 &2081578709
 Transform:

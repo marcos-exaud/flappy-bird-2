@@ -2021,6 +2021,14 @@ PrefabInstance:
       propertyPath: obstacles.Array.data[2]
       value: 
       objectReference: {fileID: 1272126658}
+    - target: {fileID: 1473385803027110683, guid: b6532fd08d70d4410a8831aea9619732, type: 3}
+      propertyPath: playerPrefab.gameObject
+      value: 
+      objectReference: {fileID: 4778571370815798606, guid: b881b9e6542ef4ef88b78104273e3a23, type: 3}
+    - target: {fileID: 1473385803027110683, guid: b6532fd08d70d4410a8831aea9619732, type: 3}
+      propertyPath: uiManagerWrapper.gameObject
+      value: 
+      objectReference: {fileID: 24783443}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6532fd08d70d4410a8831aea9619732, type: 3}
 --- !u!1001 &3950823454066675777
@@ -2168,6 +2176,10 @@ PrefabInstance:
       propertyPath: scoreboard
       value: 
       objectReference: {fileID: 1236619838}
+    - target: {fileID: 971144229356123139, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
+      propertyPath: gameOverUIWrapper.gameObject
+      value: 
+      objectReference: {fileID: 1787491932}
     - target: {fileID: 3260382640859724213, guid: 36dcb8925665442dabc7274fff4f81d2, type: 3}
       propertyPath: m_Name
       value: UI Manager

@@ -6,21 +6,20 @@ using Photon.Pun;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     [Tooltip("The prefab to use for representing the player")]
-    public GameObject playerPrefab;
+    public GameObjectWrapper playerPrefab;
 
     [SerializeField]
     protected List<GameObject> obstacles;
 
     [SerializeField]
-    protected GameObject uiManager;
+    protected GameObjectWrapper uiManagerWrapper;
 
     // Wrappers
     protected InputWrapper inputWrapper;
-    protected GameObjectWrapper uiManagerWrapper;
 
     protected virtual void Start()
     {
-        GameObject player = GameObject.Instantiate(playerPrefab, new Vector2(-5f, 0f), Quaternion.identity);
+        GameObject player = GameObject.Instantiate(playerPrefab.gameObject, new Vector2(-5f, 0f), Quaternion.identity);
 
         InitWrappers();
 
@@ -52,7 +51,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     protected virtual void InitWrappers()
     {
         if (inputWrapper == null) { inputWrapper = new InputWrapper(); }
-        uiManagerWrapper = new GameObjectWrapper(uiManager);
     }
 
     protected virtual IEnumerator StartGame()

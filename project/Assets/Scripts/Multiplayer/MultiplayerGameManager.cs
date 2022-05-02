@@ -14,7 +14,7 @@ public class MultiplayerGameManager : GameManager
 
     protected override void Start()
     {
-        if (playerPrefab == null)
+        if (playerPrefab.gameObject == null)
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
         }
@@ -24,7 +24,7 @@ public class MultiplayerGameManager : GameManager
             {
                 Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, new Vector2(-5f, 0f), Quaternion.identity, 0);
+                GameObject player = PhotonNetwork.Instantiate(playerPrefab.gameObject.name, new Vector2(-5f, 0f), Quaternion.identity, 0);
                 player.GetPhotonView().RPC("DisplayNickname", RpcTarget.Others);
             }
             else
@@ -136,7 +136,7 @@ public class MultiplayerGameManager : GameManager
     {
         yield return new WaitUntil(() => AllPlayersReady());
 
-        yield return uiManager.GetComponent<MultiplayerUIManager>().Countdown();
+        yield return uiManagerWrapper.GetComponent<MultiplayerUIManager>().Countdown();
 
         // wake up all players and obstacles to properly start the game
         foreach (GameObjectWrapper player in PlayerList.players)
@@ -174,7 +174,7 @@ public class MultiplayerGameManager : GameManager
             PlayerManager playerManager = obstacleClearer.GetComponent<PlayerManager>();
             playerManager.IncrementScore();
 
-            uiManager.GetComponent<UIManager>().UpdateScoreboard(obstacleClearer);
+            uiManagerWrapper.GetComponent<UIManager>().UpdateScoreboard(obstacleClearer);
         }
     }
 

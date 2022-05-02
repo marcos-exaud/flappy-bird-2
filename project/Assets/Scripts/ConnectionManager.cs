@@ -6,7 +6,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     [Tooltip("The UI Manager game object")]
     [SerializeField]
-    private GameObject uiManager;
+    private GameObjectWrapper uiManagerWrapper;
 
     /// <summary>
     /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
@@ -28,7 +28,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     string gameVersion = "1";
 
     // Wrappers
-    private GameObjectWrapper uiManagerWrapper;
     private PhotonNetworkWrapper punWrapper;
 
     /// <summary>
@@ -95,7 +94,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     private void InitWrappers()
     {
-        uiManagerWrapper = new GameObjectWrapper(uiManager);
         punWrapper = new PhotonNetworkWrapper();
     }
 

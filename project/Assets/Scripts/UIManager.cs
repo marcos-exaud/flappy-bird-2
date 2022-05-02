@@ -9,35 +9,23 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("The Ui Panel containing the game over menu")]
     [SerializeField]
-    protected GameObject gameOverUI;
+    protected GameObjectWrapper gameOverUIWrapper;
 
     [Tooltip("The Ui Panel containing the multiplayer menu")]
     [SerializeField]
-    private GameObject multiplayerMenuUI;
+    private GameObjectWrapper multiplayerMenuUIWrapper;
 
     [Tooltip("The Ui Panel containing the default menu")]
     [SerializeField]
-    private GameObject defaultMenuUI;
+    private GameObjectWrapper defaultMenuUIWrapper;
 
     [Tooltip("The Ui Panel containing the default menu and the multiplayer menu")]
     [SerializeField]
-    private GameObject controlPanel;
+    private GameObjectWrapper controlPanelWrapper;
 
     [Tooltip("The UI Label to inform the user that the connection is in progress")]
     [SerializeField]
-    private GameObject progressLabel;
-
-    // Wrappers
-    private GameObjectWrapper gameOverUIWrapper;
-    private GameObjectWrapper multiplayerMenuUIWrapper;
-    private GameObjectWrapper defaultMenuUIWrapper;
-    private GameObjectWrapper controlPanelWrapper;
     private GameObjectWrapper progressLabelWrapper;
-
-    protected virtual void Start()
-    {
-        InitWrappers();
-    }
 
     protected virtual void OnEnable()
     {
@@ -52,15 +40,6 @@ public class UIManager : MonoBehaviour
     protected virtual void OnDestroy()
     {
         EventManager.OnGameOver -= DisplayGameOverUI;
-    }
-
-    private void InitWrappers()
-    {
-        gameOverUIWrapper = new GameObjectWrapper(gameOverUI);
-        multiplayerMenuUIWrapper = new GameObjectWrapper(multiplayerMenuUI);
-        defaultMenuUIWrapper = new GameObjectWrapper(defaultMenuUI);
-        controlPanelWrapper = new GameObjectWrapper(controlPanel);
-        progressLabelWrapper = new GameObjectWrapper(progressLabel);
     }
 
     public virtual void UpdateScoreboard(GameObjectWrapper player)
