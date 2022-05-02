@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
 
     // Prefabs
     [SerializeField]
-    private GameObject playerPrefab;
+    private WGameObject playerPrefab;
 
     #region MonoBehaviour Methods
     void Awake()
@@ -44,7 +44,7 @@ public class PlayerManager : MonoBehaviour, IPlayerManager
     #endregion
 
     #region Getters and Setters
-    GameObject IPlayerManager.GetPlayerPrefab()
+    WGameObject IPlayerManager.GetPlayerPrefab()
     {
         return playerPrefab;
     }

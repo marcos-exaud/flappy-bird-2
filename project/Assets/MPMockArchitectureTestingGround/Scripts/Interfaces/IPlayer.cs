@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPlayer
 {
-    public GameObject gameObject { get; }
+    public WGameObject gameObject { get; }
 
     public bool GetReady();
     public void SetReady(bool value);

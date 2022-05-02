@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         playerManager = gameObject.GetComponent<IPlayerManager>();
         if (playerManager.localPlayer == null)
         {
-            InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
+            InstantiateLocalPlayer(playerManager.GetPlayerPrefab().GameObject, new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
         }
 
         StartCoroutine(StartGame());
@@ -37,11 +37,15 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         Player.onLocalPlayerReadyUp -= CommunicatePlayerReadyUpToServer;
+        NetworkEventHandler.onRemotePlayerReadyUp -= UpdateRemotePlayerReadyState;
+
     }
 
     void OnDestroy()
     {
         Player.onLocalPlayerReadyUp -= CommunicatePlayerReadyUpToServer;
+        NetworkEventHandler.onRemotePlayerReadyUp -= UpdateRemotePlayerReadyState;
+
     }
     #endregion
 
@@ -57,7 +61,7 @@ public class GameManager : MonoBehaviour
     {
         if (playerPrefab != null && position != null)
         {
-            GameObject playerGO = mpAPI.InstantiateLocalPlayer(playerManager.GetPlayerPrefab(), new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE));
+            WGameObject playerGO = new WGameObject(mpAPI.InstantiateLocalPlayer(playerPrefab, new Vector2(Consts.DEFAULT_PLAYER_POSITION, Consts.DEFAULT_PLAYER_ALTITUDE)));
             IPlayer player = playerGO.GetComponent<IPlayer>();
             playerManager.SetLocalPlayer(player);
         }
@@ -65,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     private void CommunicatePlayerReadyUpToServer(IPlayer player)
     {
-        int playerNetID = mpAPI.GetNetworkIDByGameObject(player.gameObject);
+        int playerNetID = mpAPI.GetNetworkIDByGameObject(player.gameObject.GameObject);
         mpAPI.CommunicatePlayerReadyUpToServer(new object[] { playerNetID });
     }
 
@@ -73,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            GameObject playerGO = mpAPI.GetGameObjectByNetworkID(playerNetID);
+            WGameObject playerGO = new WGameObject(mpAPI.GetGameObjectByNetworkID(playerNetID));
             IPlayer player = playerGO.GetComponent<IPlayer>();
             player.SetReady(true);
         }

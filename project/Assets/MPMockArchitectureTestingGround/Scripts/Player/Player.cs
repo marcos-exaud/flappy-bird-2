@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
 {
-    GameObject IPlayer.gameObject
+    WGameObject IPlayer.gameObject
     {
-        get { return this.gameObject; }
+        get { return new WGameObject(this.gameObject); }
     }
 
     // Delegates
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         onPlayerStart?.Invoke(this);
 
-        if (this == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
+        if ((IPlayer)this == GameObject.Find("GameSceneManager").GetComponent<IPlayerManager>().localPlayer)
         {
             StartCoroutine(WaitForReadyUp());
         }

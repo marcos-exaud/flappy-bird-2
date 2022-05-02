@@ -7,7 +7,7 @@ public interface IPlayerManager
     public IPlayer localPlayer { get; }
 
     #region Getters and Setters
-    public GameObject GetPlayerPrefab();
+    public WGameObject GetPlayerPrefab();
     public void SetLocalPlayer(IPlayer player);
     #endregion
 

@@ -171,12 +171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 900}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -278,6 +278,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameSceneManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4037574791211644030, guid: adc478eef8012441e9c2ee6211e8cf51, type: 3}
+      propertyPath: playerPrefab.gameObject
+      value: 
+      objectReference: {fileID: 6382675857652392555, guid: 503e1270355044a7ca7ffe7d5530fd48, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adc478eef8012441e9c2ee6211e8cf51, type: 3}
 --- !u!114 &240418095 stripped
